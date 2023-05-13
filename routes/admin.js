@@ -15,12 +15,12 @@ import {
   validateUpdate,
 } from "../middlewares/validate.js";
 
-// <------------😉 ------------> Admin Routes <------------😉 ------------>
+// <------------😉 ------------> Admin Api's <------------😉 ------------>
 route.post("/signUp", validateSignUp, signUp);
 route.get("/login", validateLogin, login);
-route.patch("/update", validateUpdate, update);
 route.get("/findAll", findAll);
-route.get("/findAll", findOne);
+route.patch("/update", validateUpdate, update);
+route.get("/findOne", findOne);
 route.delete("/delete", del);
 
 export default route;

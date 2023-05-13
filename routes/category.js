@@ -11,11 +11,11 @@ import {
   delelteCategory,
 } from "../controllers/category.js";
 
-// <------------😉 ------------> Category Routes <------------😉 ------------>
+// <------------😉 ------------> Category Api's <------------😉 ------------>
 route.post("/create", validateCreateCategory, createCategories);
 route.get("/findAll", findAllCategories);
-route.get("/findAll", findOneCategory);
 route.patch("/update", updateCategory);
+route.get("/findAll", findOneCategory);
 route.patch("/delete", delelteCategory);
 
 export default route;

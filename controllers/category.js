@@ -11,7 +11,7 @@ import {
 // ********************************************************************************** //
 const createCategories = async (req, res) => {
   logger.info(
-    `<------------😉 ------------> Category Create API <------------😉 ------------>`
+    `<------------😉 ------------> Category Create Controller <------------😉 ------------>`
   );
 
   try {
@@ -20,7 +20,7 @@ const createCategories = async (req, res) => {
     // find category
     const findCategory = await findByNameService(name);
 
-    if (findCategory) logger.warn(`😲 ==> ${name} category already exists.`);
+    if (findCategory) throw new Error(`${name} category already exists.`);
     const result = await createService(name, description, parentId); // creating Category
     if (result) {
       logger.info(`🤗 ==> Category Created Successfully `);
@@ -34,7 +34,7 @@ const createCategories = async (req, res) => {
 
 const findAllCategories = async (req, res) => {
   logger.info(
-    `<------------😉 ------------> Category FindAll API <------------😉 ------------>`
+    `<------------😉 ------------> Category FindAll Controller <------------😉 ------------>`
   );
 
   try {
@@ -47,22 +47,9 @@ const findAllCategories = async (req, res) => {
   }
 };
 
-const findOneCategory = async (req, res) => {
-  logger.info(
-    `<------------😉 ------------> Category FindOne API <------------😉 ------------>`
-  );
-
-  try {
-    res.status(200).json(`coming soon 🙂`);
-  } catch (error) {
-    logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
-  }
-};
-
 const updateCategory = async (req, res) => {
   logger.info(
-    `<------------😉 ------------> Category Update API <------------😉 ------------>`
+    `<------------😉 ------------> Category Update Controller <------------😉 ------------>`
   );
 
   try {
@@ -85,9 +72,22 @@ const updateCategory = async (req, res) => {
   }
 };
 
+const findOneCategory = async (req, res) => {
+  logger.info(
+    `<------------😉 ------------> Category FindOne Controller <------------😉 ------------>`
+  );
+
+  try {
+    res.status(200).json(`coming soon 🙂`);
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).json({ errorMessage: error.message });
+  }
+};
+
 const delelteCategory = async (req, res) => {
   logger.info(
-    `<------------😉 ------------> Admin Delete API <------------😉 ------------>`
+    `<------------😉 ------------> Admin Delete Controller <------------😉 ------------>`
   );
 
   try {
@@ -101,7 +101,7 @@ const delelteCategory = async (req, res) => {
 export {
   createCategories,
   findAllCategories,
-  findOneCategory,
   updateCategory,
+  findOneCategory,
   delelteCategory,
 };

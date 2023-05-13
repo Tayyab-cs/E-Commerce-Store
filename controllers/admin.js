@@ -11,7 +11,7 @@ import {
 // ********************************************************************************** //
 const signUp = async (req, res) => {
   logger.info(
-    `<------------😉 ------------> Admin SignUp API <------------😉 ------------>`
+    `<------------😉 ------------> Admin SignUp Controller <------------😉 ------------>`
   );
 
   try {
@@ -38,7 +38,7 @@ const signUp = async (req, res) => {
 
 const login = async (req, res) => {
   logger.info(
-    `<------------😉 ------------> Admin Login API <------------😉 ------------>`
+    `<------------😉 ------------> Admin Login Controller <------------😉 ------------>`
   );
 
   try {
@@ -61,7 +61,7 @@ const login = async (req, res) => {
 
 const update = async (req, res) => {
   logger.info(
-    `<------------😉 ------------> Admin Update API <------------😉 ------------>`
+    `<------------😉 ------------> Admin Update Controller <------------😉 ------------>`
   );
 
   try {
@@ -89,7 +89,7 @@ const update = async (req, res) => {
 
 const findAll = async (req, res) => {
   logger.info(
-    `<------------😉 ------------> Admin FindAll API <------------😉 ------------>`
+    `<------------😉 ------------> Admin FindAll Controller <------------😉 ------------>`
   );
 
   try {
@@ -104,7 +104,7 @@ const findAll = async (req, res) => {
 
 const findOne = async (req, res) => {
   logger.info(
-    `<------------😉 ------------> Admin FindOne API <------------😉 ------------>`
+    `<------------😉 ------------> Admin FindOne Controller <------------😉 ------------>`
   );
 
   try {
@@ -117,7 +117,7 @@ const findOne = async (req, res) => {
 
 const del = async (req, res) => {
   logger.info(
-    `<------------😉 ------------> Admin Delete API <------------😉 ------------>`
+    `<------------😉 ------------> Admin Delete Controller <------------😉 ------------>`
   );
 
   try {

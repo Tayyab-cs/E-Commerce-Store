@@ -22,14 +22,14 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          len: [6, 15], // check password length is between 6 and 15 characters
+          len: [4, 10], // check password length is between 4 and 10 characters
         },
       },
       address: {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      postalNode: {
+      postalCode: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
@@ -44,5 +44,11 @@ export default (sequelize, DataTypes) => {
     },
     { freezeTableName: true } // used to display table name same a defined.
   );
+
+  // <------------😉------------> Association one to one customer-to-Address <------------😉------------>
+  Customer.associate = function (models) {
+    Customer.hasOne(models.Address, { foreignKey: "customerId" });
+  };
+
   return Customer;
 };

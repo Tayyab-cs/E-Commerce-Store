@@ -11,7 +11,7 @@ import {
 } from "../controllers/products.js";
 
 // <------------😉 ------------> Product Api's <------------😉 ------------>
-route.post("/create", validateCreateProduct, createProduct);
+route.post("/create/:id", validateCreateProduct, createProduct);
 route.get("/findAll", findAllProducts);
 route.patch("/update", updateProduct);
 route.get("/findOne", findOneProduct);

@@ -15,8 +15,10 @@ const createProduct = async (req, res) => {
   );
 
   try {
-    const { name, price, description, subCategoryId } = req.body;
+    const { name, description, price, quantity, subCategoryId } = req.body;
+
     const subcategory = await findByIdService(subCategoryId);
+
     if (!subcategory) {
       logger.warn(`Subcategory not found`);
       return res.status(404).json({ message: "Subcategory not found" });
@@ -25,6 +27,7 @@ const createProduct = async (req, res) => {
       name,
       description,
       price,
+      quantity,
       subCategoryId
     );
 
@@ -56,19 +59,24 @@ const updateProduct = async (req, res) => {
   );
 
   try {
-    const { name, newDescription, newPrice, newSubCategoryId } = req.body;
+    const { name, newDescription, newPrice, newQuantity, newSubCategoryId } =
+      req.body;
 
     // find product
     const findProduct = await findByNameService(name);
+    console.log(findProduct);
     if (!findProduct) throw new Error("Category not found");
     // find SubCategory Id
     const findSubCategory = await findByIdService(newSubCategoryId);
     if (!findSubCategory) throw new Error("newSubCategoryId not found");
 
-    // Update Description, Price or subCategoryId.
+    const increaseQuantity = findProduct.quantity + newQuantity;
+
+    // Update Description, Price, Quantity or subCategoryId.
     await findProduct.update({
       description: newDescription,
       price: newPrice,
+      quantity: increaseQuantity,
       subCategoryId: newSubCategoryId,
     });
     logger.info(`🤗 ==> Product Updated Successfully `);

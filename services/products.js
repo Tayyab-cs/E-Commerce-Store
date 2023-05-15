@@ -33,7 +33,13 @@ const findByIdService = async (subCategoryId) => {
   }
 };
 
-const createService = async (name, description, price, subCategoryId) => {
+const createService = async (
+  name,
+  description,
+  price,
+  quantity,
+  subCategoryId
+) => {
   logger.info(
     `<------------😉 ------------> Product Create Service <------------😉 ------------>`
   );
@@ -42,6 +48,7 @@ const createService = async (name, description, price, subCategoryId) => {
       name,
       description,
       price,
+      quantity,
       subCategoryId,
     });
     return result;

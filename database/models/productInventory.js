@@ -2,7 +2,7 @@ export default (sequelize, DataTypes) => {
   const productInventory = sequelize.define(
     "productInventory",
     {
-      quantity: {
+      inStock: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },

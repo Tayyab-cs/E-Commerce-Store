@@ -6,9 +6,6 @@ const signUpCustomer = joi.object().keys({
   lastName: joi.string().required(),
   email: joi.string().email().required(),
   password: joi.string().min(4).max(10).required(),
-  address: joi.string().required(),
-  postalCode: joi.number().required(),
-  city: joi.string().required(),
   phone: joi.number().required(),
 });
 

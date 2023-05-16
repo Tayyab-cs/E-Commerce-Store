@@ -18,16 +18,7 @@ const findByEmailService = async (email) => {
   }
 };
 
-const createService = async (
-  firstName,
-  lastName,
-  email,
-  password,
-  address,
-  postalCode,
-  city,
-  phone
-) => {
+const createService = async (firstName, lastName, email, password, phone) => {
   logger.info(
     `<------------😉 ------------> Customer Create Service <------------😉 ------------>`
   );
@@ -37,9 +28,6 @@ const createService = async (
       lastName,
       email,
       password,
-      address,
-      postalCode,
-      city,
       phone,
     });
     return result;

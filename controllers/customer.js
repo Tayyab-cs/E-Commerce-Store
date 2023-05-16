@@ -14,16 +14,7 @@ const signUpCustomer = async (req, res) => {
   );
 
   try {
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      address,
-      postalCode,
-      city,
-      phone,
-    } = req.body;
+    const { firstName, lastName, email, password, phone } = req.body;
 
     // find customer
     const user = await findByEmailService(email);
@@ -37,9 +28,6 @@ const signUpCustomer = async (req, res) => {
         lastName,
         email,
         password,
-        address,
-        postalCode,
-        city,
         phone
       );
       if (result) {

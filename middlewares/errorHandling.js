@@ -1,12 +1,10 @@
-import logger from require("../utils/logger");
+import logger from "../utils/logger.js";
 
-module.exports = (err, req, res, next) => {
-  const isProduction = process.env.nodeEnvironment === "production";
-
-  logger.error("**********************************************");
-  logger.error("Error MIDDLEWARE Triggered");
+const errorHandler = (err, req, res, next) => {
+  logger.error("************************************************************");
+  logger.error("<------😡------> Error MIDDLEWARE Triggered <------😡------>");
   console.log("ERROR: ", err);
-  logger.error("**********************************************");
+  logger.error("************************************************************");
 
   if (err.name === "badRequest") {
     return res
@@ -83,4 +81,5 @@ module.exports = (err, req, res, next) => {
     .end();
 };
 
+export { errorHandler };
 // the proper way is to extend error class and define and throw you custom error; but for this one, that works

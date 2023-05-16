@@ -25,18 +25,6 @@ export default (sequelize, DataTypes) => {
           len: [4, 10], // check password length is between 4 and 10 characters
         },
       },
-      address: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      postalCode: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      city: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       phone: {
         type: DataTypes.INTEGER,
         allowNull: false,

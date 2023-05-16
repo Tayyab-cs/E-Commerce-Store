@@ -7,8 +7,7 @@ import products from "./models/products.js";
 import customer from "./models/customer.js";
 import orderDetails from "./models/orderDetails.js";
 import orderItems from "./models/orderItems.js";
-import productInventory from "./models/productInventory.js";
-import logger from "../utils/logger.js";
+import address from "./models/address.js";
 
 // <--------------------------> Connect to the DB <------------😉------------>
 const sequelize = new Sequelize({
@@ -36,7 +35,7 @@ db.products = products(sequelize, DataTypes);
 db.customer = customer(sequelize, DataTypes);
 db.orderDetails = orderDetails(sequelize, DataTypes);
 db.orderItems = orderItems(sequelize, DataTypes);
-db.productInventory = productInventory(sequelize, DataTypes);
+db.address = address(sequelize, DataTypes);
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import logger from "../utils/logger.js";
 
 import {
@@ -6,10 +7,12 @@ import {
   findAllService,
 } from "../services/admin.js";
 
+import { signLoginData } from "../utils/helper/createToken.js";
+
 // ********************************************************************************** //
 // ******************************** ADMIN CONTROLLER ******************************** //
 // ********************************************************************************** //
-const signUp = async (req, res) => {
+const signUp = async (req, res, next) => {
   logger.info(
     `<------------😉 ------------> Admin SignUp Controller <------------😉 ------------>`
   );
@@ -20,23 +23,39 @@ const signUp = async (req, res) => {
     // find admin
     const user = await findByEmailService(email);
 
-    if (user) {
-      throw new Error(`${firstName} already exists.`);
-    } else {
-      // creating admin
-      const result = await createService(firstName, lastName, email, password);
-      if (result) {
-        logger.info(`🤗 ==> Admin SignUp Successfully `);
-        res.status(201).json({ successMessage: result });
-      }
-    }
+    if (user) throw new Error(`${firstName} already exists.`);
+    // creating admin
+    const result = await createService(firstName, lastName, email, password);
+    if (!result) throw new Error(`admin not created...`);
+
+    const payload = {
+      userId: result.id,
+      email: result.email,
+    };
+
+    let accessToken = await signLoginData({ data: payload }, 120000000),
+      refreshToken = await signLoginData({ data: "" }, 180000000);
+
+    logger.info(`🤗 ==> Admin SignUp Successfully `);
+    return res.status(201).json({
+      success: true,
+      message: "Sign-up completed successfully!",
+      admin: {
+        firstName,
+        lastName,
+        email,
+        password,
+        accessToken,
+        refreshToken,
+      },
+    });
   } catch (error) {
     logger.error(`😡 ==> ${error.message}`);
-    res.status(500).json({ errorMessage: error.message });
+    return next(error);
   }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   logger.info(
     `<------------😉 ------------> Admin Login Controller <------------😉 ------------>`
   );
@@ -46,16 +65,35 @@ const login = async (req, res) => {
 
     // find user
     const user = await findByEmailService(email);
-    if (!user) {
-      throw new Error(`😲 ==> user not exists in the database.`);
-    } else if (password !== user.password) {
-      throw new Error(`😲 ==> Invalid Password.`);
-    }
+    if (!user) throw new Error(`😲 ==> user not exists in the database.`);
+
+    // comparing hashed password.
+    const result = await bcrypt.compare(password, user.password);
+    if (!result) throw new Error(`Invalid Password`);
+
+    // create token
+    const payload = {
+      userId: user.id,
+      email: user.email,
+    };
+
+    let accessToken = await signLoginData({ data: payload }, 120000000),
+      refreshToken = await signLoginData({ data: "" }, 180000000);
+
     logger.info(`🤗 ==> Admin login Successfully `);
-    res.status(201).json({ successMessage: user });
+    return res.status(201).json({
+      success: true,
+      message: "Login completed successfully!",
+      admin: {
+        email,
+        password,
+        accessToken,
+        refreshToken,
+      },
+    });
   } catch (error) {
     logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
+    return next(error);
   }
 };
 

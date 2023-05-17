@@ -21,9 +21,9 @@ export default (sequelize, DataTypes) => {
       password: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          len: [4, 10], // check password length is between 4 and 10 characters
-        },
+        // validate: {
+        //   len: [4, 10], // check password length is between 4 and 10 characters
+        // },
       },
       phone: {
         type: DataTypes.INTEGER,

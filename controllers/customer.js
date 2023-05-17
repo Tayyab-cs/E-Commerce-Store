@@ -1,14 +1,18 @@
 import logger from "../utils/logger.js";
+import bcrypt from "bcrypt";
+
 import {
   findByEmailService,
   createService,
   findAllService,
 } from "../services/customer.js";
 
+import { signLoginData } from "../utils/helper/createToken.js";
+
 // ********************************************************************************** //
 // ******************************** CUSTOMER CONTROLLER ******************************** //
 // ********************************************************************************** //
-const signUpCustomer = async (req, res) => {
+const signUpCustomer = async (req, res, next) => {
   logger.info(
     `<------------😉 ------------> Customer SignUp Controller <------------😉 ------------>`
   );
@@ -19,29 +23,45 @@ const signUpCustomer = async (req, res) => {
     // find customer
     const user = await findByEmailService(email);
 
-    if (user) {
-      throw new Error(`${firstName} already exists.`);
-    } else {
-      // creating customer
-      const result = await createService(
+    if (user) throw new Error(`${firstName} already exists.`);
+    // creating customer
+    const result = await createService(
+      firstName,
+      lastName,
+      email,
+      password,
+      phone
+    );
+
+    const payload = {
+      userId: result.id,
+      email: result.email,
+    };
+
+    let accessToken = await signLoginData({ data: payload }, 120000000),
+      refreshToken = await signLoginData({ data: "" }, 180000000);
+
+    logger.info(`🤗 ==> Customer SignUp Successfully `);
+    return res.status(201).json({
+      success: true,
+      message: "Sign-up completed successfully!",
+      customer: {
         firstName,
         lastName,
         email,
         password,
-        phone
-      );
-      if (result) {
-        logger.info(`🤗 ==> Customer SignUp Successfully `);
-        res.status(201).json({ successMessage: result });
-      }
-    }
+        phone,
+        accessToken,
+        refreshToken,
+      },
+    });
   } catch (error) {
     logger.error(`😡 ==> ${error.message}`);
-    res.status(500).json({ errorMessage: error.message });
+    return next(error);
   }
 };
 
-const loginCustomer = async (req, res) => {
+const loginCustomer = async (req, res, next) => {
   logger.info(
     `<------------😉 ------------> Customer Login Controller <------------😉 ------------>`
   );
@@ -51,16 +71,35 @@ const loginCustomer = async (req, res) => {
 
     // find user
     const user = await findByEmailService(email);
-    if (!user) {
-      throw new Error(`😲 ==> user not exists in the database.`);
-    } else if (password !== user.password) {
-      throw new Error(`😲 ==> Invalid Password.`);
-    }
+    if (!user) throw new Error(`😲 ==> user not exists in the database.`);
+
+    // compare password
+    const result = await bcrypt.compare(password, user.password);
+    if (!result) throw new Error(`Invalid Password`);
+
+    // create token
+    const payload = {
+      userId: user.id,
+      email: user.email,
+    };
+
+    let accessToken = await signLoginData({ data: payload }, 120000000),
+      refreshToken = await signLoginData({ data: "" }, 180000000);
+
     logger.info(`🤗 ==> Customer login Successfully `);
-    res.status(201).json({ successMessage: user });
+    return res.status(201).json({
+      success: true,
+      message: "Login completed successfully!",
+      customer: {
+        email,
+        password,
+        accessToken,
+        refreshToken,
+      },
+    });
   } catch (error) {
     logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
+    return next(error);
   }
 };
 

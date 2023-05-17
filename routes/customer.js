@@ -2,6 +2,7 @@ import express from "express";
 const route = express.Router();
 
 import { validateSignUpCustomer } from "../middlewares/validate.js";
+import hashPassword from "../middlewares/hashPassword.js";
 import {
   signUpCustomer,
   loginCustomer,
@@ -12,7 +13,7 @@ import {
 } from "../controllers/customer.js";
 
 // <------------😉 ------------> Customer Api's <------------😉 ------------>
-route.post("/signUp", validateSignUpCustomer, signUpCustomer);
+route.post("/signUp", validateSignUpCustomer, hashPassword, signUpCustomer);
 route.get("/login", loginCustomer);
 route.patch("/update", updateCustomer);
 route.get("/findAll", findAllCustomers);

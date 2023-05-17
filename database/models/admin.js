@@ -22,9 +22,9 @@ export default (sequelize, DataTypes) => {
       password: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          len: [4, 10], // check password length is between 6 and 15 characters
-        },
+        // validate: {
+        //   len: [4, 10], // check password length is between 4 and 10 characters
+        // },
       },
     },
     { freezeTableName: true } // used to display table name same a defined.

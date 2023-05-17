@@ -2,6 +2,12 @@ import express from "express";
 const route = express.Router();
 
 import {
+  validateSignUp,
+  validateLogin,
+  validateUpdate,
+} from "../middlewares/validate.js";
+import hashPassword from "../middlewares/hashPassword.js";
+import {
   signUp,
   login,
   update,
@@ -9,14 +15,9 @@ import {
   findOne,
   del,
 } from "../controllers/admin.js";
-import {
-  validateSignUp,
-  validateLogin,
-  validateUpdate,
-} from "../middlewares/validate.js";
 
 // <------------😉 ------------> Admin Api's <------------😉 ------------>
-route.post("/signUp", validateSignUp, signUp);
+route.post("/signUp", validateSignUp, hashPassword, signUp);
 route.get("/login", validateLogin, login);
 route.get("/findAll", findAll);
 route.patch("/update", validateUpdate, update);

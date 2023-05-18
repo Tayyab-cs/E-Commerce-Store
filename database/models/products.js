@@ -34,9 +34,9 @@ export default (sequelize, DataTypes) => {
     Products.belongsTo(models.Category, { foreignKey: subCategoryId });
   };
 
-  // <--------------------------> Association one to one <------------😉------------>
+  // <--------------------------> Association one to Many products-to-images <------------😉------------>
   Products.associate = function (models) {
-    Products.belongsTo(models.orderItems);
+    Products.hasMany(models.Images);
   };
 
   return Products;

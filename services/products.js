@@ -58,18 +58,41 @@ const createService = async (
   }
 };
 
-const findAllService = async () => {
+const findAllService = async (filter, sortOptions) => {
   logger.info(
-    `<------------😉 ------------> Product FindAll Service <------------😉 ------------>`
+    `<------------😉 ------------> Product Find Service <------------😉 ------------>`
   );
 
   try {
-    const result = await db.products.findAll();
+    const result = await db.products.findAll({
+      where: filter,
+      order: sortOptions,
+    });
     return result;
   } catch (error) {
-    console.error(err);
-    throw err;
+    console.error(error);
+    throw error;
   }
 };
 
-export { findByNameService, findByIdService, createService, findAllService };
+const paginationService = async (limit, skip) => {
+  logger.info(
+    `<------------😉 ------------> Product Pagination Service <------------😉 ------------>`
+  );
+
+  try {
+    let result = await db.products.findAll({ limit, skip });
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export {
+  findByNameService,
+  findByIdService,
+  createService,
+  findAllService,
+  paginationService,
+};

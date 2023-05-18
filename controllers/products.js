@@ -4,7 +4,10 @@ import {
   findByIdService,
   createService,
   findAllService,
+  paginationService,
 } from "../services/products.js";
+
+import db from "../database/connect.js";
 
 // ********************************************************************************** //
 // ****************************** PRODUCT CONTROLLER ******************************* //
@@ -38,18 +41,55 @@ const createProduct = async (req, res) => {
   }
 };
 
-const findAllProducts = async (req, res) => {
+const findAllProducts = async (req, res, next) => {
   logger.info(
-    `<------------😉 ------------> Product FindAll Controller <------------😉 ------------>`
+    `<------------😉 ------------> Product Find Controller <------------😉 ------------>`
   );
 
   try {
-    const products = await findAllService();
+    const { name, price, sortBy, sortOrder } = req.query;
+
+    // Build the filter object based on the query parameters
+    const filter = {};
+    if (name) filter.name = name;
+    if (price) filter.price = price;
+
+    const sortOptions = [];
+    if (sortBy) sortOptions.push([sortBy, sortOrder || "ASC"]);
+
+    // Fetch all products based on applied filter.
+    const products = await findAllService(filter, sortOptions);
+    if (products.length === 0) throw new Error(`Product not Avaliable!`);
     logger.info(`🤗 ==> All Products finded Successfully `);
-    res.status(200).json(products);
+    return res.status(200).json(products);
   } catch (error) {
     logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
+    return next(error);
+  }
+};
+
+const pagination = async (req, res, next) => {
+  try {
+    let { page, size } = req.query;
+    if (!page) page = 1;
+    if (!size) size = 5;
+
+    let limit = parseInt(size);
+    let skip = (page - 1) * size;
+
+    const totalProducts = await db.products.count();
+
+    let products = await paginationService(limit, skip);
+
+    res.json({
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / limit),
+      size,
+      data: products,
+    });
+  } catch (error) {
+    logger.error("Error fetching products:", error);
+    return next(error);
   }
 };
 
@@ -121,4 +161,5 @@ export {
   updateProduct,
   findOneProduct,
   delProduct,
+  pagination,
 };

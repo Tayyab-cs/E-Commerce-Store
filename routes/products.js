@@ -8,6 +8,7 @@ import {
   updateProduct,
   findOneProduct,
   delProduct,
+  pagination,
 } from "../controllers/products.js";
 
 // <------------😉 ------------> Product Api's <------------😉 ------------>
@@ -16,5 +17,6 @@ route.get("/findAll", findAllProducts);
 route.patch("/update", updateProduct);
 route.get("/findOne", findOneProduct);
 route.delete("/delete", delProduct);
+route.get("/pages", pagination);
 
 export default route;

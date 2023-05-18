@@ -8,6 +8,7 @@ import customer from "./models/customer.js";
 import orderDetails from "./models/orderDetails.js";
 import orderItems from "./models/orderItems.js";
 import address from "./models/address.js";
+import image from "./models/image.js";
 
 // <--------------------------> Connect to the DB <------------😉------------>
 const sequelize = new Sequelize({
@@ -36,6 +37,7 @@ db.customer = customer(sequelize, DataTypes);
 db.orderDetails = orderDetails(sequelize, DataTypes);
 db.orderItems = orderItems(sequelize, DataTypes);
 db.address = address(sequelize, DataTypes);
+db.image = image(sequelize, DataTypes);
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

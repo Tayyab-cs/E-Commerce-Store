@@ -1,6 +1,8 @@
 import express from "express";
 const route = express.Router();
+import multer from "multer";
 
+import { upload } from "../middlewares/uploadImage.js";
 import { validateCreateProduct } from "../middlewares/validate.js";
 import {
   createProduct,
@@ -12,7 +14,7 @@ import {
 } from "../controllers/products.js";
 
 // <------------😉 ------------> Product Api's <------------😉 ------------>
-route.post("/create/:id", validateCreateProduct, createProduct);
+route.post("/create", upload.array("image"), createProduct);
 route.get("/findAll", findAllProducts);
 route.patch("/update", updateProduct);
 route.get("/findOne", findOneProduct);

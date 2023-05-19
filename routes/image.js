@@ -4,6 +4,6 @@ import { upload } from "../middlewares/uploadImage.js";
 import { uploadImage } from "../controllers/image.js";
 
 // <------------😉 ------------> Image Api's <------------😉 ------------>
-route.post("/upload", upload.single("image"), uploadImage);
+// route.post("/upload", upload.single("image"), uploadImage);
 
 export default route;

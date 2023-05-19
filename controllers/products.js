@@ -1,4 +1,6 @@
 import logger from "../utils/logger.js";
+import db from "../database/connect.js";
+
 import {
   findByNameService,
   findByIdService,
@@ -7,7 +9,7 @@ import {
   paginationService,
 } from "../services/products.js";
 
-import db from "../database/connect.js";
+import { uploadImage } from "../utils/helper/uploadImage.js";
 
 // ********************************************************************************** //
 // ****************************** PRODUCT CONTROLLER ******************************* //
@@ -19,6 +21,7 @@ const createProduct = async (req, res) => {
 
   try {
     const { name, description, price, quantity, subCategoryId } = req.body;
+    const file = req.files;
 
     const subcategory = await findByIdService(subCategoryId);
 
@@ -26,6 +29,7 @@ const createProduct = async (req, res) => {
       logger.warn(`Subcategory not found`);
       return res.status(404).json({ message: "Subcategory not found" });
     }
+
     const product = await createService(
       name,
       description,
@@ -33,6 +37,10 @@ const createProduct = async (req, res) => {
       quantity,
       subCategoryId
     );
+    const productId = product.id;
+
+    // Uploading Image to S3, and on DB.
+    uploadImage(file, productId);
 
     res.status(201).json(product);
   } catch (err) {

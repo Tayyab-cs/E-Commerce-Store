@@ -78,21 +78,25 @@ const findAllProducts = async (req, res, next) => {
 
 const pagination = async (req, res, next) => {
   try {
-    let { page, size } = req.query;
-    if (!page) page = 1;
-    if (!size) size = 5;
+    let { pageNumber, pageSize } = req.query;
+    console.log(`Page: ${pageNumber}`);
 
-    let limit = parseInt(size);
-    let skip = (page - 1) * size;
+    pageNumber = parseInt(pageNumber);
+    pageSize = parseInt(pageSize);
+
+    if (!pageNumber) pageNumber = 1;
+    if (!pageSize) pageSize = 5;
+
+    let offset = (pageNumber - 1) * pageSize;
 
     const totalProducts = await db.products.count();
 
-    let products = await paginationService(limit, skip);
+    let products = await paginationService(offset, pageSize);
 
     res.json({
       totalProducts,
-      totalPages: Math.ceil(totalProducts / limit),
-      size,
+      totalPages: Math.ceil(totalProducts / pageSize),
+      pageSize,
       data: products,
     });
   } catch (error) {

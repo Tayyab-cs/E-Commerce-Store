@@ -75,17 +75,17 @@ const findAllService = async (filter, sortOptions) => {
   }
 };
 
-const paginationService = async (limit, skip) => {
+const paginationService = async (offset, pageSize) => {
   logger.info(
     `<------------😉 ------------> Product Pagination Service <------------😉 ------------>`
   );
 
   try {
-    let result = await db.products.findAll({ limit, skip });
+    let result = await db.products.findAll({ offset, limit: pageSize });
     return result;
   } catch (error) {
-    console.error(error);
-    throw error;
+    logger.error(error.message);
+    return error.message;
   }
 };
 

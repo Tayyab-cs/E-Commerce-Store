@@ -38,5 +38,10 @@ export default (sequelize, DataTypes) => {
     Customer.hasOne(models.Address, { foreignKey: "customerId" });
   };
 
+  // <------------😉------------> Association one to many customer-to-order <------------😉------------>
+  Customer.associate = function (models) {
+    Customer.hasMany(models.Order);
+  };
+
   return Customer;
 };

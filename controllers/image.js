@@ -19,6 +19,8 @@ const uploadImage = (req, res, next) => {
     s3ForcePathStyle: true,
   };
 
+  // S3 ManagedUpload with callbacks are not supported in AWS SDK for JavaScript (v3).
+  // Please convert to `await client.upload(params, options).promise()`, and re-run aws-sdk-js-codemod.
   s3.upload(params, (err, data) => {
     try {
       if (err) throw new Error(`Error uploading image to S3: ${err}`);

@@ -2,6 +2,7 @@ import aws from "aws-sdk";
 import fs from "fs";
 import logger from "../logger.js";
 import db from "../../database/connect.js";
+import validateImage from "../../validation/image.js";
 import { credentials, config } from "../../config/aws-config.js";
 
 const uploadImage = async (file, productId) => {
@@ -15,11 +16,13 @@ const uploadImage = async (file, productId) => {
 
   const s3 = new aws.S3();
 
-  console.log(file);
-
   // iterating req.files for multiple images...
   file.forEach((item) => {
     const prodId = productId;
+
+    // validate Image keys
+    const { error, value } = validateImage.validate(item);
+    if (error) return error;
 
     // preparing params object to upload image to S3....
     const params = {

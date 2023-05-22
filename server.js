@@ -14,6 +14,7 @@ import productApis from "./routes/products.js";
 import customerApis from "./routes/customer.js";
 import addressApis from "./routes/address.js";
 import imageApis from "./routes/image.js";
+import orderApis from "./routes/order.js";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +27,7 @@ app.use("/api/product", productApis);
 app.use("/api/customer", customerApis);
 app.use("/api/address", addressApis);
 app.use("/api/image", imageApis);
+app.use("/api", orderApis);
 
 // <------------😉------------> using error handling middleware <------------😉------------>
 app.use(errorHandler);

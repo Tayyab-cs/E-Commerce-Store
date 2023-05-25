@@ -5,6 +5,8 @@ import {
   findByEmailService,
   createService,
   findAllService,
+  findOneService,
+  deleteService,
 } from "../services/customer.js";
 
 import { signLoginData } from "../utils/helper/createToken.js";
@@ -103,7 +105,7 @@ const loginCustomer = async (req, res, next) => {
   }
 };
 
-const updateCustomer = async (req, res) => {
+const updateCustomer = async (req, res, next) => {
   logger.info(
     `<------------😉 ------------> Customer Update Controller <------------😉 ------------>`
   );
@@ -126,12 +128,12 @@ const updateCustomer = async (req, res) => {
       .status(200)
       .json({ successMessage: `🤗 ==> Password updated successfully` });
   } catch (error) {
-    logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
+    logger.error(`😡 ==> ${error.message}`);
+    return next(error);
   }
 };
 
-const findAllCustomers = async (req, res) => {
+const findAllCustomers = async (req, res, next) => {
   logger.info(
     `<------------😉 ------------> Customer FindAll Controller <------------😉 ------------>`
   );
@@ -141,34 +143,49 @@ const findAllCustomers = async (req, res) => {
     logger.info(`🤗 ==> All Customers finded Successfully `);
     res.status(200).json(customers);
   } catch (error) {
-    logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
+    logger.error(`😡 ==> ${error.message}`);
+    return next(error);
   }
 };
 
-const findOneCustomer = async (req, res) => {
+const findOneCustomer = async (req, res, next) => {
   logger.info(
     `<------------😉 ------------> Customer FindOne Controller <------------😉 ------------>`
   );
 
   try {
-    res.status(200).json(`coming soon 🙂`);
+    const { userId } = req.user;
+    const customer = await findOneService(userId);
+    logger.info(`🤗 ==> Customer Finded Successfully...`);
+    return res.status(200).json({
+      success: true,
+      message: `Customer founded successfully!`,
+      customer: customer,
+    });
   } catch (error) {
-    logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
+    logger.error(`😡 ==> ${error.message}`);
+    return next(error);
   }
 };
 
-const delCustomer = async (req, res) => {
+const delCustomer = async (req, res, next) => {
   logger.info(
     `<------------😉 ------------> Customer Delete Controller <------------😉 ------------>`
   );
 
   try {
-    res.status(200).json(`coming soon 🙂`);
+    const { email } = req.user;
+    const customer = await deleteService(email);
+    if (customer === 0) throw new Error(`notFound`);
+    logger.info(`🤗 ==> Customer Deleted Successfully...`);
+    return res.status(200).json({
+      success: true,
+      message: `customer Deleted successfully!`,
+      customer: customer,
+    });
   } catch (error) {
     logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
+    return next(error);
   }
 };
 

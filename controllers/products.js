@@ -6,6 +6,7 @@ import {
   findByIdService,
   createService,
   findAllService,
+  deleteService,
   paginationService,
 } from "../services/products.js";
 
@@ -76,35 +77,6 @@ const findAllProducts = async (req, res, next) => {
   }
 };
 
-const pagination = async (req, res, next) => {
-  try {
-    let { pageNumber, pageSize } = req.query;
-    console.log(`Page: ${pageNumber}`);
-
-    pageNumber = parseInt(pageNumber);
-    pageSize = parseInt(pageSize);
-
-    if (!pageNumber) pageNumber = 1;
-    if (!pageSize) pageSize = 5;
-
-    let offset = (pageNumber - 1) * pageSize;
-
-    const totalProducts = await db.products.count();
-
-    let products = await paginationService(offset, pageSize);
-
-    res.json({
-      totalProducts,
-      totalPages: Math.ceil(totalProducts / pageSize),
-      pageSize,
-      data: products,
-    });
-  } catch (error) {
-    logger.error("Error fetching products:", error);
-    return next(error);
-  }
-};
-
 const updateProduct = async (req, res) => {
   logger.info(
     `<------------😉 ------------> Product Update Controller <------------😉 ------------>`
@@ -141,29 +113,52 @@ const updateProduct = async (req, res) => {
   }
 };
 
-const findOneProduct = async (req, res) => {
-  logger.info(
-    `<------------😉 ------------> Product FindOne Controller <------------😉 ------------>`
-  );
-
-  try {
-    res.status(200).json(`coming soon 🙂`);
-  } catch (error) {
-    logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
-  }
-};
-
 const delProduct = async (req, res) => {
   logger.info(
     `<------------😉 ------------> Product Delete Controller <------------😉 ------------>`
   );
 
   try {
-    res.status(200).json(`coming soon 🙂`);
+    const { id, name } = req.body;
+    const result = await deleteService(id, name);
+    if (result === 0) throw new Error(`product already deleted...`);
+    return res.status(200).json({
+      success: true,
+      message: `Product Deleted successfully!`,
+      productDeleted: result,
+    });
   } catch (error) {
     logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
+    throw error;
+  }
+};
+
+const pagination = async (req, res, next) => {
+  try {
+    let { pageNumber, pageSize } = req.query;
+    console.log(`Page: ${pageNumber}`);
+
+    pageNumber = parseInt(pageNumber);
+    pageSize = parseInt(pageSize);
+
+    if (!pageNumber) pageNumber = 1;
+    if (!pageSize) pageSize = 5;
+
+    let offset = (pageNumber - 1) * pageSize;
+
+    const totalProducts = await db.products.count();
+
+    let products = await paginationService(offset, pageSize);
+
+    res.json({
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / pageSize),
+      pageSize,
+      data: products,
+    });
+  } catch (error) {
+    logger.error("Error fetching products:", error);
+    return next(error);
   }
 };
 
@@ -171,7 +166,6 @@ export {
   createProduct,
   findAllProducts,
   updateProduct,
-  findOneProduct,
   delProduct,
   pagination,
 };

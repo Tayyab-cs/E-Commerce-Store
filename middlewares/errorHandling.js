@@ -3,7 +3,7 @@ import logger from "../utils/logger.js";
 const errorHandler = (err, req, res, next) => {
   logger.error("************************************************************");
   logger.error("<------😡------> Error MIDDLEWARE Triggered <------😡------>");
-  console.log("ERROR: ", err);
+  console.log(err);
   logger.error("************************************************************");
 
   if (err.name === "badRequest") {

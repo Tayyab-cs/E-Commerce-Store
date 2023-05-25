@@ -50,4 +50,38 @@ const findAllService = async () => {
   }
 };
 
-export { findByEmailService, createService, findAllService };
+const findOneService = async (id) => {
+  logger.info(
+    `<------------😉 ------------> Admin findOne Service <------------😉 ------------>`
+  );
+
+  try {
+    const result = await db.admin.findByPk(id);
+    return result;
+  } catch (error) {
+    console.error(err);
+    throw err;
+  }
+};
+
+const deleteService = async (email) => {
+  logger.info(
+    `<------------😉 ------------> Admin Delete Service <------------😉 ------------>`
+  );
+
+  try {
+    const result = await db.admin.destroy({ where: { email } });
+    return result;
+  } catch (error) {
+    console.error(err);
+    throw err;
+  }
+};
+
+export {
+  findByEmailService,
+  createService,
+  findAllService,
+  findOneService,
+  deleteService,
+};

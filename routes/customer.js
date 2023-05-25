@@ -12,12 +12,14 @@ import {
   delCustomer,
 } from "../controllers/customer.js";
 
+import { decryptToken } from "../middlewares/decryptToken.js";
+
 // <------------😉 ------------> Customer Api's <------------😉 ------------>
 route.post("/signUp", validateSignUpCustomer, hashPassword, signUpCustomer);
 route.get("/login", loginCustomer);
 route.patch("/update", updateCustomer);
 route.get("/findAll", findAllCustomers);
-route.get("/findOne", findOneCustomer);
-route.delete("/delete", delCustomer);
+route.get("/findOne", decryptToken, findOneCustomer);
+route.delete("/delete", decryptToken, delCustomer);
 
 export default route;

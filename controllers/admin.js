@@ -5,6 +5,8 @@ import {
   findByEmailService,
   createService,
   findAllService,
+  findOneService,
+  deleteService,
 } from "../services/admin.js";
 
 import { signLoginData } from "../utils/helper/createToken.js";
@@ -146,23 +148,36 @@ const findOne = async (req, res) => {
   );
 
   try {
-    res.status(200).json(`coming soon 🙂`);
+    const { userId } = req.user;
+    const admin = await findOneService(userId);
+    return res.status(200).json({
+      success: true,
+      message: `Admin founded successfully!`,
+      admin: admin,
+    });
   } catch (error) {
     logger.error(error.message);
     res.status(500).json({ errorMessage: error.message });
   }
 };
 
-const del = async (req, res) => {
+const del = async (req, res, next) => {
   logger.info(
     `<------------😉 ------------> Admin Delete Controller <------------😉 ------------>`
   );
 
   try {
-    res.status(200).json(`coming soon 🙂`);
+    const { email } = req.user;
+    const admin = await deleteService(email);
+    if (admin === 0) throw new Error(`notFound`);
+    return res.status(200).json({
+      success: true,
+      message: `Admin Deleted successfully!`,
+      admin: admin,
+    });
   } catch (error) {
     logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
+    return next(error);
   }
 };
 

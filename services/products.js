@@ -75,6 +75,23 @@ const findAllService = async (filter, sortOptions) => {
   }
 };
 
+const deleteService = async (id, name) => {
+  logger.info(
+    `<------------😉 ------------> Product Delete Service <------------😉 ------------>`
+  );
+
+  try {
+    await db.orderedProduct.destroy({ where: { productId: id } });
+    const result = await db.products.destroy({ where: { id: id, name: name } });
+
+    if (!result) throw new Error(`Product not found...`);
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 const paginationService = async (offset, pageSize) => {
   logger.info(
     `<------------😉 ------------> Product Pagination Service <------------😉 ------------>`
@@ -94,5 +111,6 @@ export {
   findByIdService,
   createService,
   findAllService,
+  deleteService,
   paginationService,
 };

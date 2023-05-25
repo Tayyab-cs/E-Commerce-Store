@@ -7,7 +7,6 @@ import {
   createProduct,
   findAllProducts,
   updateProduct,
-  findOneProduct,
   delProduct,
   pagination,
 } from "../controllers/products.js";
@@ -21,7 +20,6 @@ route.post(
 );
 route.get("/findAll", findAllProducts);
 route.patch("/update", updateProduct);
-route.get("/findOne", findOneProduct);
 route.delete("/delete", delProduct);
 route.get("/pages", pagination);
 

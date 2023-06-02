@@ -14,7 +14,6 @@ import {
   forgetPassword,
 } from "../controllers/admin.js";
 import { decryptToken } from "../middlewares/decryptToken.js";
-import { isAdmin } from "../middlewares/isAdmin.js";
 
 // <-----😉 -----> Admin Api's <-----😉 ----->
 route.post("/signUp", validateSignUp, hashPassword, signUp);

@@ -30,7 +30,10 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    { freezeTableName: true } // used to display table name same a defined.
+    {
+      paranoid: true, // used for soft delete...
+      freezeTableName: true, // used to display table name same a defined...
+    }
   );
 
   // <------------😉------------> Association one to one customer-to-Address <------------😉------------>

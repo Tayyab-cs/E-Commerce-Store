@@ -27,7 +27,10 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
-    { freezeTableName: true } // used to display table name same a defined.
+    {
+      paranoid: true, // used for soft delete...
+      freezeTableName: true, // used to display table name same a defined...
+    }
   );
 
   // <------------😉------------> Association one to one orderProduct-to-order <------------😉------------>

@@ -6,17 +6,17 @@ import {
   createAddress,
   updateAddress,
   findAllAddress,
-  findOneAddress,
   delAddress,
-  testApi,
 } from "../controllers/address.js";
 
-// <------------😉 ------------> Address Api's <------------😉 ------------>
-route.post("/create", validateAddress, createAddress);
-route.patch("/update", updateAddress);
-route.get("/findAll", findAllAddress);
-route.get("/findOne", findOneAddress);
-route.delete("/delete", delAddress);
-route.get("/test", testApi);
+import { decryptToken } from "../middlewares/decryptToken.js";
+import { isCustomer } from "../middlewares/isCustomer.js";
+import { isAdmin } from "../middlewares/isAdmin.js";
+
+// <-----😉 -----> Address Api's <-----😉 ----->
+route.post("/create", decryptToken, isCustomer, validateAddress, createAddress);
+route.patch("/update", decryptToken, isCustomer, updateAddress);
+route.get("/findAll", decryptToken, isAdmin, findAllAddress);
+route.delete("/delete/:id", decryptToken, isCustomer, delAddress);
 
 export default route;

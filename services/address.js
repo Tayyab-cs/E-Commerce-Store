@@ -6,14 +6,12 @@ import db from "../database/connect.js";
 // ********************************************************************************** //
 
 const findByIdService = async (customerId) => {
-  logger.info(
-    `<------------😉 ------------> Address find-by-Id Service <------------😉 ------------>`
-  );
+  logger.info(`<-----😉 -----> Address find-by-Id Service <-----😉 ----->`);
   try {
     const result = await db.customer.findByPk(customerId);
     return result;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     throw error;
   }
 };
@@ -27,9 +25,7 @@ const createService = async (
   postalCode,
   customerId
 ) => {
-  logger.info(
-    `<------------😉 ------------> Address Create Service <------------😉 ------------>`
-  );
+  logger.info(`<-----😉 -----> Address Create Service <-----😉 ----->`);
   console.log(state);
   try {
     const result = await db.address.create({
@@ -43,15 +39,13 @@ const createService = async (
     });
     return result;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     throw error;
   }
 };
 
 const updateService = async (updateInfo, customerId) => {
-  logger.info(
-    `<------------😉 ------------> Address Update Service <------------😉 ------------>`
-  );
+  logger.info(`<-----😉 -----> Address Update Service <-----😉 ----->`);
 
   try {
     const result = await db.address.update(updateInfo, {
@@ -59,23 +53,39 @@ const updateService = async (updateInfo, customerId) => {
     });
     return result;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     throw error;
   }
 };
 
-const findAllService = async () => {
-  logger.info(
-    `<------------😉 ------------> Address findAll Service <------------😉 ------------>`
-  );
+const findAllService = async (filter) => {
+  logger.info(`<-----😉 -----> Address findAll Service <-----😉 ----->`);
 
   try {
-    const result = await db.address.findAll();
+    const result = await db.address.findAll({ where: filter });
     return result;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     throw error;
   }
 };
 
-export { findByIdService, createService, updateService, findAllService };
+const delService = async (id) => {
+  logger.info(`<-----😉 -----> Address findAll Service <-----😉 ----->`);
+
+  try {
+    const result = await db.address.destroy({ where: { id } });
+    return result;
+  } catch (error) {
+    logger.error(error);
+    throw error;
+  }
+};
+
+export {
+  findByIdService,
+  createService,
+  updateService,
+  findAllService,
+  delService,
+};

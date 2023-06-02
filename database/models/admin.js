@@ -26,8 +26,24 @@ export default (sequelize, DataTypes) => {
         //   len: [4, 10], // check password length is between 4 and 10 characters
         // },
       },
+      role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          recordLimit() {
+            return Admin.count().then((count) => {
+              if (count > 1) {
+                throw new Error("Maximum record limit reached.");
+              }
+            });
+          },
+        },
+      },
     },
-    { freezeTableName: true } // used to display table name same a defined.
+    {
+      paranoid: true, // used for soft delete...
+      freezeTableName: true, // used to display table name same a defined...
+    }
   );
   return Admin;
 };

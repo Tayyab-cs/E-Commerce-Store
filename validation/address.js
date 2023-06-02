@@ -1,6 +1,6 @@
 import joi from "joi";
 
-// <------------😉 ------------> validate Address object keys <------------😉 ------------>
+// <-----😉 -----> validate Address object keys <-----😉 ----->
 const address = joi.object().keys({
   houseNo: joi.string().required(),
   streetNo: joi.string().required(),

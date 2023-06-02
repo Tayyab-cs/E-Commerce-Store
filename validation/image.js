@@ -1,6 +1,6 @@
 import joi from "joi";
 
-// <------------😉 ------------> validate Image object keys <------------😉 ------------>
+// <-----😉 -----> validate Image object keys <-----😉 ----->
 const validateImage = joi.object({
   fieldname: joi.string().required(),
   originalname: joi.string().required(),

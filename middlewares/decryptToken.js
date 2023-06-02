@@ -11,8 +11,8 @@ const decryptToken = async (req, res, next) => {
     const token = authToken.split(" ")[1];
     const decode = jwt.decode(token);
     const userData = decode.data;
-    const { userId, email } = userData;
-    req.user = { userId, email };
+    const { userId, email, role } = userData;
+    req.user = { userId, email, role };
     next();
   } catch (error) {
     logger.error(`Token not decoded properly...`);

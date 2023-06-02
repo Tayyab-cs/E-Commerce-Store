@@ -30,12 +30,15 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "Address",
+          model: "Customer",
           key: "id",
         },
       },
     },
-    { freezeTableName: true } // used to display table name same a defined.
+    {
+      paranoid: true, // used for soft delete...
+      freezeTableName: true, // used to display table name same a defined...
+    }
   );
 
   // <------------😉------------> Association one to one Address-to-Customer <------------😉------------>

@@ -2,20 +2,19 @@ import express from "express";
 const route = express.Router();
 
 import { validateCreateCategory } from "../middlewares/validate.js";
+import { decryptToken } from "../middlewares/decryptToken.js";
 
 import {
   createCategories,
   findAllCategories,
-  findOneCategory,
   updateCategory,
   delelteCategory,
 } from "../controllers/category.js";
 
-// <------------😉 ------------> Category Api's <------------😉 ------------>
-route.post("/create", validateCreateCategory, createCategories);
-route.get("/findAll", findAllCategories);
-route.patch("/update", updateCategory);
-route.get("/findAll", findOneCategory);
-route.patch("/delete", delelteCategory);
+// <-----😉 -----> Category Api's <-----😉 ----->
+route.post("/create", decryptToken, validateCreateCategory, createCategories);
+route.get("/findAll", decryptToken, findAllCategories);
+route.patch("/update/:id", decryptToken, updateCategory);
+route.delete("/delete/:id", decryptToken, delelteCategory);
 
 export default route;

@@ -10,7 +10,7 @@ import orderedProduct from "./models/orderedProduct.js";
 import address from "./models/address.js";
 import image from "./models/image.js";
 
-// <--------------------------> Connect to the DB <------------😉------------>
+// <------------😉------------> Connect to the DB <------------😉------------>
 const sequelize = new Sequelize({
   username,
   host: host,
@@ -28,7 +28,7 @@ try {
 }
 
 const db = {};
-// <--------------------------> Calling the Model Functions <------------😉------------>
+// <------------😉------------> Calling the Model Functions <------------😉------------>
 
 db.category = category(sequelize, DataTypes);
 db.admin = admin(sequelize, DataTypes);

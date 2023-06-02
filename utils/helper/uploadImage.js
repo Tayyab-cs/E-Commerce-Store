@@ -6,9 +6,7 @@ import validateImage from "../../validation/image.js";
 import { credentials, config } from "../../config/aws-config.js";
 
 const uploadImage = async (file, productId) => {
-  logger.info(
-    `<------------😉 ------------> Image Upload Helper <------------😉 ------------>`
-  );
+  logger.info(`<-----😉 -----> Image Upload Helper <-----😉 ----->`);
 
   // verify s3 bucket credentials....
   aws.config.update(credentials);

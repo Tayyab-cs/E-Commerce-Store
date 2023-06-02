@@ -10,18 +10,23 @@ import {
   signUp,
   login,
   update,
-  findAll,
-  findOne,
-  del,
+  changePassword,
+  forgetPassword,
 } from "../controllers/admin.js";
 import { decryptToken } from "../middlewares/decryptToken.js";
+import { isAdmin } from "../middlewares/isAdmin.js";
 
-// <------------😉 ------------> Admin Api's <------------😉 ------------>
+// <-----😉 -----> Admin Api's <-----😉 ----->
 route.post("/signUp", validateSignUp, hashPassword, signUp);
-route.get("/login", validateLogin, login);
-route.get("/findAll", findAll);
-route.patch("/update", validateUpdate, update);
-route.get("/findOne", decryptToken, findOne);
-route.delete("/delete", decryptToken, del);
+route.post("/login", validateLogin, login);
+route.patch("/update", decryptToken, update);
+route.patch(
+  "/changePassword",
+  validateUpdate,
+  decryptToken,
+  hashPassword,
+  changePassword
+);
+route.patch("/forgetPassword", forgetPassword);
 
 export default route;

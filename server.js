@@ -7,6 +7,8 @@ dotenv.config();
 const { PORT } = process.env;
 
 import { errorHandler } from "./middlewares/errorHandling.js";
+import { superAdmin } from "./dbSeed/superAdmin.js";
+import { config } from "./config/app-config.js";
 
 import adminApis from "./routes/admin.js";
 import categoryApis from "./routes/category.js";
@@ -35,8 +37,13 @@ app.use("/api", paymentApis);
 app.use(errorHandler);
 
 // <------------😉------------> Listening Server <------------😉------------>
-db.sequelize.sync({ force: false, alter: false }).then(() => {
+db.sequelize.sync({ force: config.force, alter: config.alter }).then(() => {
   app.listen(PORT || 5000, () => {
     console.log(`Server is running on PORT: ${PORT} ...`);
   });
+
+  // calling superAdmin seeder...
+  if (config.force === true) {
+    superAdmin();
+  }
 });

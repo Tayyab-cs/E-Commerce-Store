@@ -1,6 +1,6 @@
 import joi from "joi";
 
-// <------------😉 ------------> validate Customer SignUp object keys <------------😉 ------------>
+// <-----😉 -----> validate Customer SignUp object keys <-----😉 ----->
 const signUpCustomer = joi.object().keys({
   firstName: joi.string().required(),
   lastName: joi.string().required(),

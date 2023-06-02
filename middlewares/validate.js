@@ -15,7 +15,7 @@ import {
 // ********************************************************************************** //
 const validateSignUp = (req, res, next) => {
   logger.info(
-    `<------------😉 ------------> SignUp Admin Validate Middleware <------------😉 ------------>`
+    `<-----😉 -----> SignUp Admin Validate Middleware <-----😉 ----->`
   );
 
   const { error } = signUp.validate(req.body);
@@ -33,7 +33,7 @@ const validateSignUp = (req, res, next) => {
 
 const validateLogin = (req, res, next) => {
   logger.info(
-    `<------------😉 ------------> Login Admin Validate Middleware <------------😉 ------------>`
+    `<-----😉 -----> Login Admin Validate Middleware <-----😉 ----->`
   );
 
   const { error } = login.validate(req.body);
@@ -51,7 +51,7 @@ const validateLogin = (req, res, next) => {
 
 const validateUpdate = (req, res, next) => {
   logger.info(
-    `<------------😉 ------------> Update Admin Validate Middleware <------------😉 ------------>`
+    `<-----😉 -----> Update Admin Validate Middleware <-----😉 ----->`
   );
 
   const { error } = update.validate(req.body);
@@ -73,7 +73,7 @@ const validateUpdate = (req, res, next) => {
 
 const validateCreateCategory = (req, res, next) => {
   logger.info(
-    `<------------😉 ------------> Create Category Validate Middleware <------------😉 ------------>`
+    `<-----😉 -----> Create Category Validate Middleware <-----😉 ----->`
   );
 
   const { error } = createCategory.validate(req.body);
@@ -95,7 +95,7 @@ const validateCreateCategory = (req, res, next) => {
 
 const validateCreateProduct = (req, res, next) => {
   logger.info(
-    `<------------😉 ------------> Create Product Validate Middleware <------------😉 ------------>`
+    `<-----😉 -----> Create Product Validate Middleware <-----😉 ----->`
   );
 
   const { error } = createProduct.validate(req.body);
@@ -116,7 +116,7 @@ const validateCreateProduct = (req, res, next) => {
 // ********************************************************************************** //
 const validateSignUpCustomer = (req, res, next) => {
   logger.info(
-    `<------------😉 ------------> SignUp Customer Validate Middleware <------------😉 ------------>`
+    `<-----😉 -----> SignUp Customer Validate Middleware <-----😉 ----->`
   );
 
   const { error } = signUpCustomer.validate(req.body);
@@ -136,9 +136,7 @@ const validateSignUpCustomer = (req, res, next) => {
 // ********************************* VALIDATE ADDRESS ******************************* //
 // ********************************************************************************** //
 const validateAddress = (req, res, next) => {
-  logger.info(
-    `<------------😉 ------------> Address Validate Middleware <------------😉 ------------>`
-  );
+  logger.info(`<-----😉 -----> Address Validate Middleware <-----😉 ----->`);
 
   const { error } = address.validate(req.body);
 
@@ -158,7 +156,7 @@ const validateAddress = (req, res, next) => {
 // ********************************************************************************** //
 const validateStripeCustomer = (req, res, next) => {
   logger.info(
-    `<------------😉 ------------> Stripe Customer Validate Middleware <------------😉 ------------>`
+    `<-----😉 -----> Stripe Customer Validate Middleware <-----😉 ----->`
   );
 
   const { error } = createStripeCustomer.validate(req.body);
@@ -175,9 +173,7 @@ const validateStripeCustomer = (req, res, next) => {
 };
 
 const validateAddCard = (req, res, next) => {
-  logger.info(
-    `<------------😉 ------------> Add Card Validate Middleware <------------😉 ------------>`
-  );
+  logger.info(`<-----😉 -----> Add Card Validate Middleware <-----😉 ----->`);
 
   const { error } = addCard.validate(req.body);
 
@@ -194,7 +190,7 @@ const validateAddCard = (req, res, next) => {
 
 const validateCharge = (req, res, next) => {
   logger.info(
-    `<------------😉 ------------> Create Charge Validate Middleware <------------😉 ------------>`
+    `<-----😉 -----> Create Charge Validate Middleware <-----😉 ----->`
   );
 
   const { error } = createCharge.validate(req.body);

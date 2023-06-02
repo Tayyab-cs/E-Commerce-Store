@@ -16,10 +16,25 @@ import {
   validateCharge,
 } from "../middlewares/validate.js";
 
-// <------------😉 ------------> Payment Api's <------------😉 ------------>
-route.post("/stripeCustomer", validateStripeCustomer, createCustomer);
-route.post("/addCard", validateAddCard, addCard);
-route.post("/createCharge", validateCharge, createCharge);
+import { decryptToken } from "../middlewares/decryptToken.js";
+import { isCustomer } from "../middlewares/isCustomer.js";
+
+// <-----😉 -----> Payment Api's <-----😉 ----->
+route.post(
+  "/stripeCustomer",
+  decryptToken,
+  isCustomer,
+  validateStripeCustomer,
+  createCustomer
+);
+route.post("/addCard", decryptToken, isCustomer, validateAddCard, addCard);
+route.post(
+  "/createCharge",
+  decryptToken,
+  isCustomer,
+  validateCharge,
+  createCharge
+);
 route.get("/viewAllCards", viewAllCards);
 route.patch("/updateCardDetails", updateCardDetails);
 route.delete("/deleteCard", deleteCard);

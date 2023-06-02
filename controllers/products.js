@@ -1,13 +1,14 @@
 import logger from "../utils/logger.js";
 import db from "../database/connect.js";
+import { errorObject } from "../utils/errorObject.js";
 
 import {
-  findByNameService,
   findByIdService,
+  findByPkService,
   createService,
   findAllService,
+  findAllImagService,
   deleteService,
-  paginationService,
 } from "../services/products.js";
 
 import { uploadImage } from "../utils/helper/uploadImage.js";
@@ -15,20 +16,22 @@ import { uploadImage } from "../utils/helper/uploadImage.js";
 // ********************************************************************************** //
 // ****************************** PRODUCT CONTROLLER ******************************* //
 // ********************************************************************************** //
-const createProduct = async (req, res) => {
-  logger.info(
-    `<------------😉 ------------> Product Create Controller <------------😉 ------------>`
-  );
+const createProduct = async (req, res, next) => {
+  logger.info(`<-----😉 -----> Product Create Controller <-----😉 ----->`);
 
   try {
-    const { name, description, price, quantity, subCategoryId } = req.body;
+    const { name, description, price, quantity, categoryId } = req.body;
     const file = req.files;
+    const { role } = req.user;
 
-    const subcategory = await findByIdService(subCategoryId);
+    if (role !== "superAdmin")
+      throw errorObject("🤕 -> unAuthorized User...", "unAuthorized");
 
-    if (!subcategory) {
-      logger.warn(`Subcategory not found`);
-      return res.status(404).json({ message: "Subcategory not found" });
+    const category = await findByIdService(categoryId);
+
+    if (!category) {
+      logger.warn(`category not found`);
+      throw errorObject("🤕 -> category not found...", "notFound");
     }
 
     const product = await createService(
@@ -36,107 +39,40 @@ const createProduct = async (req, res) => {
       description,
       price,
       quantity,
-      subCategoryId
+      categoryId
     );
     const productId = product.id;
 
     // Uploading Image to S3, and on DB.
     uploadImage(file, productId);
 
-    res.status(201).json(product);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-const findAllProducts = async (req, res, next) => {
-  logger.info(
-    `<------------😉 ------------> Product Find Controller <------------😉 ------------>`
-  );
-
-  try {
-    const { name, price, sortBy, sortOrder } = req.query;
-
-    // Build the filter object based on the query parameters
-    const filter = {};
-    if (name) filter.name = name;
-    if (price) filter.price = price;
-
-    const sortOptions = [];
-    if (sortBy) sortOptions.push([sortBy, sortOrder || "ASC"]);
-
-    // Fetch all products based on applied filter.
-    const products = await findAllService(filter, sortOptions);
-    if (products.length === 0) throw new Error(`Product not Avaliable!`);
-    logger.info(`🤗 ==> All Products finded Successfully `);
-    return res.status(200).json(products);
+    logger.info(`🤗 -> Product Created Successfully...`);
+    return res.status(200).json({
+      success: true,
+      message: "🤗 -> Product Created Successfully...",
+      product: product,
+    });
   } catch (error) {
-    logger.error(error.message);
+    logger.error(`😡 -> product not created...`);
     return next(error);
   }
 };
 
-const updateProduct = async (req, res) => {
-  logger.info(
-    `<------------😉 ------------> Product Update Controller <------------😉 ------------>`
-  );
+const findAllProducts = async (req, res, next) => {
+  logger.info(`<-----😉 -----> Product Find Controller <-----😉 ----->`);
 
   try {
-    const { name, newDescription, newPrice, newQuantity, newSubCategoryId } =
-      req.body;
+    let { categoryId, name, price, sortBy, sortOrder, pageNumber, pageSize } =
+      req.query;
 
-    // find product
-    const findProduct = await findByNameService(name);
-    console.log(findProduct);
-    if (!findProduct) throw new Error("Category not found");
-    // find SubCategory Id
-    const findSubCategory = await findByIdService(newSubCategoryId);
-    if (!findSubCategory) throw new Error("newSubCategoryId not found");
+    // Build the filter object based on the query parameters
+    let filter = {};
+    if (categoryId) filter.categoryId = categoryId;
+    if (name) filter.name = name;
+    if (price) filter.price = price;
 
-    const increaseQuantity = findProduct.quantity + newQuantity;
-
-    // Update Description, Price, Quantity or subCategoryId.
-    await findProduct.update({
-      description: newDescription,
-      price: newPrice,
-      quantity: increaseQuantity,
-      subCategoryId: newSubCategoryId,
-    });
-    logger.info(`🤗 ==> Product Updated Successfully `);
-    res
-      .status(200)
-      .json({ successMessage: `🤗 ==> Product Updated Successfully` });
-  } catch (error) {
-    logger.error(error.message);
-    res.status(500).json({ errorMessage: error.message });
-  }
-};
-
-const delProduct = async (req, res) => {
-  logger.info(
-    `<------------😉 ------------> Product Delete Controller <------------😉 ------------>`
-  );
-
-  try {
-    const { id, name } = req.body;
-    const result = await deleteService(id, name);
-    if (result === 0) throw new Error(`product already deleted...`);
-    return res.status(200).json({
-      success: true,
-      message: `Product Deleted successfully!`,
-      productDeleted: result,
-    });
-  } catch (error) {
-    logger.error(error.message);
-    throw error;
-  }
-};
-
-const pagination = async (req, res, next) => {
-  try {
-    let { pageNumber, pageSize } = req.query;
-    console.log(`Page: ${pageNumber}`);
+    let sortOptions = [];
+    if (sortBy) sortOptions.push([sortBy, sortOrder || "ASC"]);
 
     pageNumber = parseInt(pageNumber);
     pageSize = parseInt(pageSize);
@@ -146,26 +82,91 @@ const pagination = async (req, res, next) => {
 
     let offset = (pageNumber - 1) * pageSize;
 
-    const totalProducts = await db.products.count();
+    let totalProducts = await db.products.count();
 
-    let products = await paginationService(offset, pageSize);
+    // Fetch all products based on applied filter.
+    let products = await findAllService(filter, sortOptions, offset, pageSize);
+    if (products.length === 0)
+      throw errorObject("🤕 -> Product not Found...", "notFound");
 
-    res.json({
-      totalProducts,
-      totalPages: Math.ceil(totalProducts / pageSize),
-      pageSize,
-      data: products,
+    let productIds = products.map((product) => product.id);
+
+    let images = await findAllImagService(productIds);
+
+    logger.info(`🤗 -> All Products finded Successfully...`);
+    return res.status(200).json({
+      success: true,
+      message: "🤗 -> All Products finded Successfully...",
+      pagination: {
+        totalProducts,
+        totalPages: Math.ceil(totalProducts / pageSize),
+        pageSize,
+      },
+      product: products,
+      images: images,
     });
   } catch (error) {
-    logger.error("Error fetching products:", error);
+    logger.error(`😡 -> product not finded...`);
     return next(error);
   }
 };
 
-export {
-  createProduct,
-  findAllProducts,
-  updateProduct,
-  delProduct,
-  pagination,
+const updateProduct = async (req, res, next) => {
+  logger.info(`<-----😉 -----> Product Update Controller <-----😉 ----->`);
+
+  try {
+    const productId = req.params.id;
+    const { name, description, price, quantity, categoryId } = req.body;
+
+    // find product
+    const findProduct = await findByPkService(productId);
+    if (!findProduct)
+      throw errorObject("🤕 -> Product not Found...", "notFound");
+
+    const increaseQuantity = findProduct.quantity + quantity;
+
+    // Updated Details...
+    const updateInfo = {};
+    name && (updateInfo.name = name);
+    description && (updateInfo.description = description);
+    price && (updateInfo.price = price);
+    quantity && (updateInfo.quantity = increaseQuantity);
+    categoryId && (updateInfo.categoryId = categoryId);
+
+    // Update Description, Price, Quantity or CategoryId.
+    const product = await findProduct.update(updateInfo);
+
+    logger.info(`🤗 -> Product Updated Successfully...`);
+    return res.status(200).json({
+      success: true,
+      message: "🤗 -> Product Updated Successfully...",
+      product: product,
+    });
+  } catch (error) {
+    logger.error(`😡 -> product not updated...`);
+    return next(error);
+  }
 };
+
+const delProduct = async (req, res, next) => {
+  logger.info(`<-----😉 -----> Product Delete Controller <-----😉 ----->`);
+
+  try {
+    const productId = req.params.id;
+    const result = await deleteService(productId);
+    if (result === 0)
+      throw errorObject("🤕 -> product already deleted...", "delete");
+
+    logger.info(`🤗 -> Product Deleted successfully...`);
+    return res.status(200).json({
+      success: true,
+      message: `🤗 -> Product Deleted successfully...`,
+      productDeleted: result,
+    });
+  } catch (error) {
+    logger.error(`😡 -> product not deleted...`);
+    return next(error);
+  }
+};
+
+export { createProduct, findAllProducts, updateProduct, delProduct };

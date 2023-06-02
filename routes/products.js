@@ -8,19 +8,21 @@ import {
   findAllProducts,
   updateProduct,
   delProduct,
-  pagination,
 } from "../controllers/products.js";
 
-// <------------😉 ------------> Product Api's <------------😉 ------------>
+import { decryptToken } from "../middlewares/decryptToken.js";
+import { isAdmin } from "../middlewares/isAdmin.js";
+
+// <-----😉 -----> Product Api's <-----😉 ----->
 route.post(
   "/create",
+  decryptToken,
   upload.array("image"),
   validateCreateProduct,
   createProduct
 );
-route.get("/findAll", findAllProducts);
-route.patch("/update", updateProduct);
-route.delete("/delete", delProduct);
-route.get("/pages", pagination);
+route.get("/findAll", decryptToken, isAdmin, findAllProducts);
+route.patch("/update/:id", decryptToken, isAdmin, updateProduct);
+route.delete("/delete/:id", decryptToken, isAdmin, delProduct);
 
 export default route;

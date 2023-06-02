@@ -1,82 +1,101 @@
 import logger from "../utils/logger.js";
 
-const errorHandler = (err, req, res, next) => {
-  logger.error("************************************************************");
+const errorHandler = (error, req, res, next) => {
   logger.error("<------😡------> Error MIDDLEWARE Triggered <------😡------>");
-  console.log(err);
+  logger.error("************************************************************");
+  logger.error(error);
   logger.error("************************************************************");
 
-  if (err.name === "badRequest") {
+  if (error.name === "badRequest") {
     return res
       .status(400)
-      .send({
+      .json({
         success: false,
-        message: err.message,
+        type: error.name,
+        message: error.message,
+        details: error.details,
       })
       .end();
   }
-  if (err.name === "unAuthorized") {
+  if (error.name === "unAuthorized") {
     return res
       .status(401)
-      .send({
+      .json({
         success: false,
-        message: err.message,
+        type: error.name,
+        message: error.message,
+        details: error.details,
       })
       .end();
   }
-  if (err.name === "permission") {
+  if (error.name === "permission") {
     return res
       .status(403)
-      .send({
+      .json({
         success: false,
-        message: err.message,
+        type: error.name,
+        message: error.message,
+        details: error.details,
       })
       .end();
   }
-  if (err.name === "duplication") {
+  if (error.name === "duplication") {
     return res
       .status(409)
-      .send({
+      .json({
         success: false,
-        message: err.message,
+        type: error.name,
+        message: error.message,
+        details: error.details,
       })
       .end();
   }
-  if (err.name === "notFound") {
+  if (error.name === "notFound") {
     return res
       .status(404)
-      .send({
+      .json({
         success: false,
-        message: err.message,
+        type: error.name,
+        message: error.message,
+        details: error.details,
       })
       .end();
   }
-  if (err.name === "delete") {
+  if (error.name === "delete") {
     return res
       .status(409)
-      .send({
+      .json({
         success: false,
+        type: error.name,
         message: isProduction
           ? "There was some error. Please try again later"
-          : err.message,
+          : error.message,
       })
       .end();
   }
-  if (err.isOperational) {
+  if (error.isOperational) {
     return res
       .status(400)
-      .send({
+      .json({
         success: false,
-        message: err.statusCode,
+        message: error.statusCode,
       })
       .end();
   }
+
+  // if (error instanceof AppError) {
+  //   return res.status(error.statusCode).json({
+  //     errorCode: error.errorCode,
+  //     message: error.message,
+  //   });
+  // }
 
   return res
     .status(500)
-    .send({
+    .json({
       success: false,
       message: "Unexpected internal server error!",
+      details: error.details,
     })
     .end();
 };

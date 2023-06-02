@@ -13,7 +13,10 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.INTEGER, // self-referencing foreign-key.
       },
     },
-    { freezeTableName: true }
+    {
+      paranoid: true, // used for soft delete...
+      freezeTableName: true, // used to display table name same a defined...
+    }
   );
 
   // <--------------------------> Association self-referencing <------------😉------------>

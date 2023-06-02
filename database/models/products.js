@@ -18,7 +18,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      subCategoryId: {
+      categoryId: {
         type: DataTypes.INTEGER,
         references: {
           model: "Category",
@@ -26,12 +26,15 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
-    { freezeTableName: true } // used to display table name same a defined.
+    {
+      paranoid: true, // used for soft delete...
+      freezeTableName: true, // used to display table name same a defined...
+    }
   );
 
   // <------------😉------------> Association one to one products-to-category <------------😉------------>
   Products.associate = function (models) {
-    Products.belongsTo(models.Category, { foreignKey: subCategoryId });
+    Products.belongsTo(models.Category, { foreignKey: categoryId });
   };
 
   // <------------😉------------> Association one to Many products-to-images <------------😉------------>

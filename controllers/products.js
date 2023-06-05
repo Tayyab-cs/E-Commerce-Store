@@ -2,21 +2,14 @@ import logger from "../utils/logger.js";
 import db from "../database/connect.js";
 import { errorObject } from "../utils/errorObject.js";
 
-import {
-  findByIdService,
-  findByPkService,
-  createService,
-  findAllService,
-  findAllImagService,
-  deleteService,
-} from "../services/products.js";
+import productService from "../services/products.js";
 
 import { uploadImage } from "../utils/helper/uploadImage.js";
 
 // ********************************************************************************** //
 // ****************************** PRODUCT CONTROLLER ******************************* //
 // ********************************************************************************** //
-const createProduct = async (req, res, next) => {
+const create = async (req, res, next) => {
   logger.info(`<-----😉 -----> Product Create Controller <-----😉 ----->`);
 
   try {
@@ -27,14 +20,14 @@ const createProduct = async (req, res, next) => {
     if (role !== "superAdmin")
       throw errorObject("🤕 -> unAuthorized User...", "unAuthorized");
 
-    const category = await findByIdService(categoryId);
+    const category = await productService.findById(categoryId);
 
     if (!category) {
       logger.warn(`category not found`);
       throw errorObject("🤕 -> category not found...", "notFound");
     }
 
-    const product = await createService(
+    const product = await productService.create(
       name,
       description,
       price,
@@ -58,7 +51,7 @@ const createProduct = async (req, res, next) => {
   }
 };
 
-const findAllProducts = async (req, res, next) => {
+const findAll = async (req, res, next) => {
   logger.info(`<-----😉 -----> Product Find Controller <-----😉 ----->`);
 
   try {
@@ -85,13 +78,18 @@ const findAllProducts = async (req, res, next) => {
     let totalProducts = await db.products.count();
 
     // Fetch all products based on applied filter.
-    let products = await findAllService(filter, sortOptions, offset, pageSize);
+    let products = await productService.findAll(
+      filter,
+      sortOptions,
+      offset,
+      pageSize
+    );
     if (products.length === 0)
       throw errorObject("🤕 -> Product not Found...", "notFound");
 
     let productIds = products.map((product) => product.id);
 
-    let images = await findAllImagService(productIds);
+    let images = await productService.findAllImages(productIds);
 
     logger.info(`🤗 -> All Products finded Successfully...`);
     return res.status(200).json({
@@ -111,7 +109,7 @@ const findAllProducts = async (req, res, next) => {
   }
 };
 
-const updateProduct = async (req, res, next) => {
+const update = async (req, res, next) => {
   logger.info(`<-----😉 -----> Product Update Controller <-----😉 ----->`);
 
   try {
@@ -119,7 +117,7 @@ const updateProduct = async (req, res, next) => {
     const { name, description, price, quantity, categoryId } = req.body;
 
     // find product
-    const findProduct = await findByPkService(productId);
+    const findProduct = await productService.findByPk(productId);
     if (!findProduct)
       throw errorObject("🤕 -> Product not Found...", "notFound");
 
@@ -148,12 +146,12 @@ const updateProduct = async (req, res, next) => {
   }
 };
 
-const delProduct = async (req, res, next) => {
+const del = async (req, res, next) => {
   logger.info(`<-----😉 -----> Product Delete Controller <-----😉 ----->`);
 
   try {
     const productId = req.params.id;
-    const result = await deleteService(productId);
+    const result = await productService.del(productId);
     if (result === 0)
       throw errorObject("🤕 -> product already deleted...", "delete");
 
@@ -169,4 +167,4 @@ const delProduct = async (req, res, next) => {
   }
 };
 
-export { createProduct, findAllProducts, updateProduct, delProduct };
+export default { create, findAll, update, del };

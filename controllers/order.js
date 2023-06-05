@@ -1,12 +1,7 @@
 import logger from "../utils/logger.js";
 import { errorObject } from "../utils/errorObject.js";
 
-import {
-  findByPkService,
-  findByIdService,
-  createOrderService,
-  createOrderProductService,
-} from "../services/order.js";
+import orderService from "../services/order.js";
 
 // ********************************************************************************** //
 // ******************************** ORDER CONTROLLER ******************************** //
@@ -16,11 +11,11 @@ const order = async (req, res, next) => {
 
   try {
     const { userId } = req.user;
-    const user = await findByPkService(userId);
+    const user = await orderService.findByPk(userId);
     if (!user) throw errorObject(`🤕 -> Customer not Found...`, "notFound");
     const { firstName, lastName, phone } = user;
 
-    const address = await findByIdService(userId);
+    const address = await orderService.findById(userId);
     if (!address)
       throw errorObject(`🤕 -> Customer address does not found...`, "notFound");
     const { houseNo, streetNo, area, city, state, postalCode } = address;
@@ -34,13 +29,13 @@ const order = async (req, res, next) => {
     });
 
     // creating order
-    const order = await createOrderService(totalAmount, userId);
+    const order = await orderService.createOrder(totalAmount, userId);
     for (let i = 0; i < products.length; i++) {
       products[i].orderId = order.id;
     }
 
     // creating ordered details...
-    await createOrderProductService(products);
+    await orderService.createOrderProduct(products);
 
     logger.info(`🤗 -> Order Created Successfully...`);
     return res.status(201).json({

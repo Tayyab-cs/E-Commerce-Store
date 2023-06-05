@@ -1,28 +1,35 @@
 import express from "express";
 const route = express.Router();
 
-import { validateSignUpCustomer } from "../middlewares/validate.js";
 import hashPassword from "../middlewares/hashPassword.js";
-import {
-  signUpCustomer,
-  loginCustomer,
-  updateCustomer,
-  changePassword,
-  forgetPassword,
-  findAllCustomers,
-  delCustomer,
-} from "../controllers/customer.js";
+import customerController from "../controllers/customer.js";
+import validateCustomer from "../validation/customer.js";
+import { validate } from "../middlewares/validate.js";
 
 import { decryptToken } from "../middlewares/decryptToken.js";
 import { isAdmin } from "../middlewares/isAdmin.js";
 
 // <-----😉 -----> Customer Api's <-----😉 ----->
-route.post("/signUp", validateSignUpCustomer, hashPassword, signUpCustomer);
-route.post("/login", loginCustomer);
-route.patch("/update", decryptToken, updateCustomer);
-route.patch("/changePassword", decryptToken, hashPassword, changePassword);
-route.patch("/forgetPassword", forgetPassword);
-route.get("/findAll", decryptToken, isAdmin, findAllCustomers);
-route.delete("/delete/:id", decryptToken, isAdmin, delCustomer);
+route.post(
+  "/signUp",
+  validate(validateCustomer.signUp),
+  hashPassword,
+  customerController.signUp
+);
+route.post(
+  "/login",
+  validate(validateCustomer.login),
+  customerController.login
+);
+route.patch("/update", decryptToken, customerController.update);
+route.patch(
+  "/changePassword",
+  decryptToken,
+  hashPassword,
+  customerController.changePassword
+);
+route.patch("/forgetPassword", customerController.forgetPassword);
+route.get("/findAll", decryptToken, isAdmin, customerController.findAll);
+route.delete("/delete/:id", decryptToken, isAdmin, customerController.del);
 
 export default route;

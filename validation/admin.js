@@ -20,4 +20,4 @@ const update = joi.object().keys({
   newPassword: joi.string().min(4).max(10).required(),
 });
 
-export { signUp, login, update };
+export default { signUp, login, update };

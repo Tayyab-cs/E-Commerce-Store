@@ -1,20 +1,10 @@
 import express from "express";
 const route = express.Router();
 
-import {
-  createCustomer,
-  addCard,
-  viewAllCards,
-  updateCardDetails,
-  deleteCard,
-  createCharge,
-} from "../controllers/payment.js";
+import paymentController from "../controllers/payment.js";
 
-import {
-  validateStripeCustomer,
-  validateAddCard,
-  validateCharge,
-} from "../middlewares/validate.js";
+import { validate } from "../middlewares/validate.js";
+import validatePayment from "../validation/payment.js";
 
 import { decryptToken } from "../middlewares/decryptToken.js";
 import { isCustomer } from "../middlewares/isCustomer.js";
@@ -24,19 +14,25 @@ route.post(
   "/stripeCustomer",
   decryptToken,
   isCustomer,
-  validateStripeCustomer,
-  createCustomer
+  validate(validatePayment.createStripeCustomer),
+  paymentController.createCustomer
 );
-route.post("/addCard", decryptToken, isCustomer, validateAddCard, addCard);
+route.post(
+  "/addCard",
+  decryptToken,
+  isCustomer,
+  validate(validatePayment.addCard),
+  paymentController.addCard
+);
 route.post(
   "/createCharge",
   decryptToken,
   isCustomer,
-  validateCharge,
-  createCharge
+  validate(validatePayment.createCharge),
+  paymentController.createCharge
 );
-route.get("/viewAllCards", viewAllCards);
-route.patch("/updateCardDetails", updateCardDetails);
-route.delete("/deleteCard", deleteCard);
+route.get("/viewAllCards", paymentController.viewAllCards);
+route.patch("/updateCardDetails", paymentController.updateCardDetails);
+route.delete("/deleteCard", paymentController.deleteCard);
 
 export default route;

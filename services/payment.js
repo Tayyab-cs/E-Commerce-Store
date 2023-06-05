@@ -10,7 +10,7 @@ const stripeInstance = stripe(STRIPE_SECRET_KEY);
 // ********************************* PAYMENT SERVICE ******************************** //
 // ********************************************************************************** //
 
-const stripeCustomerService = async (name, email) => {
+const stripeCustomer = async (name, email) => {
   logger.info(
     `<-----😉 -----> Payment Create Stripe Customer Service <-----😉 ----->`
   );
@@ -26,13 +26,7 @@ const stripeCustomerService = async (name, email) => {
   }
 };
 
-const cardTokenService = async (
-  cardName,
-  cardNumber,
-  expMonth,
-  expYear,
-  cardCvc
-) => {
+const cardToken = async (cardName, cardNumber, expMonth, expYear, cardCvc) => {
   logger.info(
     `<-----😉 -----> Payment Create Card Token Service <-----😉 ----->`
   );
@@ -53,7 +47,7 @@ const cardTokenService = async (
   }
 };
 
-const createCardService = async (stripeCustomerId, cardTokenId) => {
+const createCard = async (stripeCustomerId, cardTokenId) => {
   logger.info(`<-----😉 -----> Payment Create Card Service <-----😉 ----->`);
   try {
     const card = await stripeInstance.customers.createSource(stripeCustomerId, {
@@ -66,7 +60,7 @@ const createCardService = async (stripeCustomerId, cardTokenId) => {
   }
 };
 
-const createChargeService = async (cardId, stripeCustomerId, amount) => {
+const createCharge = async (cardId, stripeCustomerId, amount) => {
   logger.info(`<-----😉 -----> Payment Create Charge Service <-----😉 ----->`);
   try {
     const createCharge = await stripeInstance.charges.create({
@@ -84,7 +78,7 @@ const createChargeService = async (cardId, stripeCustomerId, amount) => {
   }
 };
 
-const viewAllCardsService = async (customerId) => {
+const viewAllCards = async (customerId) => {
   logger.info(`<-----😉 -----> Payment View All Cards Service <-----😉 ----->`);
   try {
     const savedCards = await stripeInstance.customers.listSources(customerId, {
@@ -97,7 +91,7 @@ const viewAllCardsService = async (customerId) => {
   }
 };
 
-const updateCardDetailsService = async (
+const updateCardDetails = async (
   customerId,
   cardId,
   cardName,
@@ -124,7 +118,7 @@ const updateCardDetailsService = async (
   }
 };
 
-const deleteCardService = async (customerId, cardId) => {
+const deleteCard = async (customerId, cardId) => {
   logger.info(`<-----😉 -----> Delete Card Service <-----😉 ----->`);
   try {
     const deleteCard = await stripeInstance.customers.deleteSource(
@@ -138,12 +132,12 @@ const deleteCardService = async (customerId, cardId) => {
   }
 };
 
-export {
-  stripeCustomerService,
-  cardTokenService,
-  createCardService,
-  createChargeService,
-  viewAllCardsService,
-  updateCardDetailsService,
-  deleteCardService,
+export default {
+  stripeCustomer,
+  cardToken,
+  createCard,
+  createCharge,
+  viewAllCards,
+  updateCardDetails,
+  deleteCard,
 };

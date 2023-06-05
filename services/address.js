@@ -5,7 +5,7 @@ import db from "../database/connect.js";
 // ********************************** ADDRESS SERVICE ********************************* //
 // ********************************************************************************** //
 
-const findByIdService = async (customerId) => {
+const findById = async (customerId) => {
   logger.info(`<-----😉 -----> Address find-by-Id Service <-----😉 ----->`);
   try {
     const result = await db.customer.findByPk(customerId);
@@ -16,7 +16,7 @@ const findByIdService = async (customerId) => {
   }
 };
 
-const createService = async (
+const create = async (
   houseNo,
   streetNo,
   area,
@@ -44,7 +44,7 @@ const createService = async (
   }
 };
 
-const updateService = async (updateInfo, customerId) => {
+const update = async (updateInfo, customerId) => {
   logger.info(`<-----😉 -----> Address Update Service <-----😉 ----->`);
 
   try {
@@ -58,7 +58,7 @@ const updateService = async (updateInfo, customerId) => {
   }
 };
 
-const findAllService = async (filter) => {
+const findAll = async (filter) => {
   logger.info(`<-----😉 -----> Address findAll Service <-----😉 ----->`);
 
   try {
@@ -70,7 +70,7 @@ const findAllService = async (filter) => {
   }
 };
 
-const delService = async (id) => {
+const del = async (id) => {
   logger.info(`<-----😉 -----> Address findAll Service <-----😉 ----->`);
 
   try {
@@ -82,10 +82,4 @@ const delService = async (id) => {
   }
 };
 
-export {
-  findByIdService,
-  createService,
-  updateService,
-  findAllService,
-  delService,
-};
+export default { findById, create, update, findAll, del };

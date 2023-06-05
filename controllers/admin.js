@@ -1,11 +1,8 @@
 import bcrypt from "bcrypt";
 import logger from "../utils/logger.js";
 import { errorObject } from "../utils/errorObject.js";
-
-import { findByEmailService, createService } from "../services/admin.js";
-
+import adminService from "../services/admin.js";
 import { signLoginData } from "../utils/helper/createToken.js";
-
 import sendEmail from "../utils/sendEmail.js";
 
 // ********************************************************************************** //
@@ -18,11 +15,16 @@ const signUp = async (req, res, next) => {
     const { firstName, lastName, email, password } = req.body;
 
     // find admin
-    const user = await findByEmailService(email);
+    const user = await adminService.findByEmail(email);
     if (user) throw errorObject("🤕 -> Admin Already Exists...", "duplication");
 
     // creating admin
-    const result = await createService(firstName, lastName, email, password);
+    const result = await adminService.create(
+      firstName,
+      lastName,
+      email,
+      password
+    );
     if (!result) throw errorObject("🤕 -> Admin not Created...");
 
     const payload = {
@@ -59,7 +61,7 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     // find Admin
-    const admin = await findByEmailService(email);
+    const admin = await adminService.findByEmail(email);
     if (!admin) throw errorObject("🤕 -> Admin not Found...", "notFound");
 
     // comparing hashed password.
@@ -96,7 +98,7 @@ const changePassword = async (req, res, next) => {
     const { oldPassword, newPassword } = req.body;
 
     // validate Admin
-    const admin = await findByEmailService(email);
+    const admin = await adminService.findByEmail(email);
     if (!admin) throw errorObject("🤕 -> Admin not Found...", "notFound");
 
     // Validate Admin Role...
@@ -131,7 +133,7 @@ const forgetPassword = async (req, res, next) => {
     const { email } = req.body;
 
     // validate Admin
-    const admin = await findByEmailService(email);
+    const admin = await adminService.findByEmail(email);
     if (!admin) throw errorObject("🤕 -> Admin not Found...", "notFound");
 
     // Validate Admin Role...
@@ -178,7 +180,7 @@ const update = async (req, res, next) => {
     const { userId, email } = req.user;
 
     // find admin
-    const user = await findByEmailService(email);
+    const user = await adminService.findByEmail(email);
     if (!user) throw errorObject("🤕 -> Admin not Found...", "notFound");
 
     // Validate Admin Role...
@@ -207,4 +209,4 @@ const update = async (req, res, next) => {
   }
 };
 
-export { signUp, login, update, changePassword, forgetPassword };
+export default { signUp, login, update, changePassword, forgetPassword };

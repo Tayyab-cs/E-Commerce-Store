@@ -1,12 +1,11 @@
 import logger from "../utils/logger.js";
 import db from "../database/connect.js";
-import { where } from "sequelize";
 
 // ********************************************************************************** //
 // ********************************** CUSTOMER SERVICE ********************************* //
 // ********************************************************************************** //
 
-const findByEmailService = async (email) => {
+const findByEmail = async (email) => {
   logger.info(`<-----😉 -----> Customer SignUp Service <-----😉 ----->`);
   try {
     const result = await db.customer.findOne({ where: { email } });
@@ -17,7 +16,7 @@ const findByEmailService = async (email) => {
   }
 };
 
-const createService = async (firstName, lastName, email, password, phone) => {
+const create = async (firstName, lastName, email, password, phone) => {
   logger.info(`<-----😉 -----> Customer Create Service <-----😉 ----->`);
   try {
     const result = await db.customer.create({
@@ -34,7 +33,7 @@ const createService = async (firstName, lastName, email, password, phone) => {
   }
 };
 
-const findAllService = async (filter) => {
+const findAll = async (filter) => {
   logger.info(`<-----😉 -----> Customer findAll Service <-----😉 ----->`);
 
   try {
@@ -46,7 +45,7 @@ const findAllService = async (filter) => {
   }
 };
 
-const findOneService = async (id) => {
+const findOne = async (id) => {
   logger.info(`<-----😉 -----> Customer findOne Service <-----😉 ----->`);
 
   try {
@@ -58,7 +57,7 @@ const findOneService = async (id) => {
   }
 };
 
-const deleteService = async (id) => {
+const del = async (id) => {
   logger.info(`<-----😉 -----> Customer Delete Service <-----😉 ----->`);
 
   try {
@@ -70,10 +69,4 @@ const deleteService = async (id) => {
   }
 };
 
-export {
-  findByEmailService,
-  createService,
-  findAllService,
-  findOneService,
-  deleteService,
-};
+export default { findByEmail, create, findAll, findOne, del };

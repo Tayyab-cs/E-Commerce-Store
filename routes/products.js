@@ -1,14 +1,12 @@
 import express from "express";
 const route = express.Router();
 
+import { validate } from "../middlewares/validate.js";
+import validateProduct from "../validation/products.js";
+
 import { upload } from "../middlewares/uploadImage.js";
-import { validateCreateProduct } from "../middlewares/validate.js";
-import {
-  createProduct,
-  findAllProducts,
-  updateProduct,
-  delProduct,
-} from "../controllers/products.js";
+
+import productController from "../controllers/products.js";
 
 import { decryptToken } from "../middlewares/decryptToken.js";
 import { isAdmin } from "../middlewares/isAdmin.js";
@@ -18,11 +16,11 @@ route.post(
   "/create",
   decryptToken,
   upload.array("image"),
-  validateCreateProduct,
-  createProduct
+  validate(validateProduct.create),
+  productController.create
 );
-route.get("/findAll", decryptToken, isAdmin, findAllProducts);
-route.patch("/update/:id", decryptToken, isAdmin, updateProduct);
-route.delete("/delete/:id", decryptToken, isAdmin, delProduct);
+route.get("/findAll", decryptToken, isAdmin, productController.findAll);
+route.patch("/update/:id", decryptToken, isAdmin, productController.update);
+route.delete("/delete/:id", decryptToken, isAdmin, productController.del);
 
 export default route;

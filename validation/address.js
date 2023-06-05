@@ -11,4 +11,4 @@ const address = joi.object().keys({
   customerId: joi.number().required(),
 });
 
-export { address };
+export default { address };

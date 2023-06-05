@@ -5,7 +5,7 @@ import db from "../database/connect.js";
 // ******************************** PRODUCT SERVICE ******************************** //
 // ********************************************************************************** //
 
-const findByNameService = async (name) => {
+const findByName = async (name) => {
   logger.info(`<-----😉 -----> Product Find-by-Name Service <-----😉 ----->`);
   try {
     const result = await db.products.findOne({ where: { name } });
@@ -16,7 +16,7 @@ const findByNameService = async (name) => {
   }
 };
 
-const findByPkService = async (productId) => {
+const findByPk = async (productId) => {
   logger.info(`<-----😉 -----> Product Find-by-Pk Service <-----😉 ----->`);
 
   try {
@@ -28,7 +28,7 @@ const findByPkService = async (productId) => {
   }
 };
 
-const findByIdService = async (categoryId) => {
+const findById = async (categoryId) => {
   logger.info(`<-----😉 -----> Product Find-by-ID Service <-----😉 ----->`);
   try {
     const result = await db.category.findByPk(categoryId);
@@ -39,13 +39,7 @@ const findByIdService = async (categoryId) => {
   }
 };
 
-const createService = async (
-  name,
-  description,
-  price,
-  quantity,
-  categoryId
-) => {
+const create = async (name, description, price, quantity, categoryId) => {
   logger.info(`<-----😉 -----> Product Create Service <-----😉 ----->`);
   try {
     const result = await db.products.create({
@@ -62,7 +56,7 @@ const createService = async (
   }
 };
 
-const findAllService = async (filter, sortOptions, offset, pageSize) => {
+const findAll = async (filter, sortOptions, offset, pageSize) => {
   logger.info(`<-----😉 -----> Product Find Service <-----😉 ----->`);
 
   try {
@@ -80,7 +74,7 @@ const findAllService = async (filter, sortOptions, offset, pageSize) => {
   }
 };
 
-const findAllImagService = async (productIds) => {
+const findAllImages = async (productIds) => {
   logger.info(
     `<-----😉 -----> Product Find All Images Service <-----😉 ----->`
   );
@@ -94,7 +88,7 @@ const findAllImagService = async (productIds) => {
   }
 };
 
-const deleteService = async (productId) => {
+const del = async (productId) => {
   logger.info(`<-----😉 -----> Product Delete Service <-----😉 ----->`);
 
   try {
@@ -110,12 +104,12 @@ const deleteService = async (productId) => {
   }
 };
 
-export {
-  findByNameService,
-  findByIdService,
-  findByPkService,
-  createService,
-  findAllService,
-  findAllImagService,
-  deleteService,
+export default {
+  findByName,
+  findById,
+  findByPk,
+  create,
+  findAll,
+  findAllImages,
+  del,
 };

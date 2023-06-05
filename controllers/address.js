@@ -1,18 +1,12 @@
 import logger from "../utils/logger.js";
 import { errorObject } from "../utils/errorObject.js";
 
-import {
-  findByIdService,
-  createService,
-  updateService,
-  findAllService,
-  delService,
-} from "../services/address.js";
+import addressService from "../services/address.js";
 
 // ********************************************************************************** //
 // ******************************** ADDRESS CONTROLLER ******************************** //
 // ********************************************************************************** //
-const createAddress = async (req, res, next) => {
+const create = async (req, res, next) => {
   logger.info(`<-----😉 -----> Address Create Controller <-----😉 ----->`);
 
   try {
@@ -20,11 +14,11 @@ const createAddress = async (req, res, next) => {
       req.body;
 
     // find customer
-    const customer = await findByIdService(customerId);
+    const customer = await addressService.findById(customerId);
     if (!customer) throw errorObject("🤕 -> Customer not found", "notFound");
 
     // creating address
-    const result = await createService(
+    const result = await addressService.create(
       houseNo,
       streetNo,
       area,
@@ -47,7 +41,7 @@ const createAddress = async (req, res, next) => {
   }
 };
 
-const updateAddress = async (req, res, next) => {
+const update = async (req, res, next) => {
   logger.info(`<-----😉 -----> Address Update Controller <-----😉 ----->`);
 
   try {
@@ -56,7 +50,7 @@ const updateAddress = async (req, res, next) => {
 
     let updateInfo = {};
     // find customer
-    const user = await findByIdService(customerId);
+    const user = await addressService.findById(customerId);
     if (!user) throw errorObject("🤕 -> Customer not found", "notFound");
     houseNo && (updateInfo.houseNo = houseNo);
     streetNo && (updateInfo.streetNo = streetNo);
@@ -67,7 +61,7 @@ const updateAddress = async (req, res, next) => {
     customerId && (updateInfo.customerId = customerId);
 
     // Update password
-    const result = await updateService(updateInfo, customerId);
+    const result = await addressService.update(updateInfo, customerId);
 
     logger.info(`🤗 -> Address updated Successfully `);
     res.status(201).json({
@@ -81,7 +75,7 @@ const updateAddress = async (req, res, next) => {
   }
 };
 
-const findAllAddress = async (req, res, next) => {
+const findAll = async (req, res, next) => {
   logger.info(`<-----😉 -----> Address FindAll Controller <-----😉 ----->`);
 
   try {
@@ -98,7 +92,7 @@ const findAllAddress = async (req, res, next) => {
     state && (filter.state = state);
     postalCode && (filter.postalCode = postalCode);
 
-    const address = await findAllService(filter);
+    const address = await addressService.findAll(filter);
 
     logger.info(`🤗 -> All Address finded Successfully `);
     res.status(201).json({
@@ -112,12 +106,12 @@ const findAllAddress = async (req, res, next) => {
   }
 };
 
-const delAddress = async (req, res, next) => {
+const del = async (req, res, next) => {
   logger.info(`<-----😉 -----> Address Delete Controller <-----😉 ----->`);
 
   try {
     const id = req.params.id;
-    const result = await delService(id);
+    const result = await addressService.del(id);
 
     logger.info(`Address Deleted Successfully...`);
     res.status(201).json({
@@ -131,4 +125,4 @@ const delAddress = async (req, res, next) => {
   }
 };
 
-export { createAddress, updateAddress, findAllAddress, delAddress };
+export default { create, update, findAll, del };

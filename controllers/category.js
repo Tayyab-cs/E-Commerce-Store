@@ -1,18 +1,12 @@
 import logger from "../utils/logger.js";
 import { errorObject } from "../utils/errorObject.js";
 
-import {
-  findByIdService,
-  findByNameService,
-  createService,
-  findAllService,
-  deleteService,
-} from "../services/category.js";
+import categoryService from "../services/category.js";
 
 // ********************************************************************************** //
 // ****************************** CATEGORY CONTROLLER ******************************* //
 // ********************************************************************************** //
-const createCategories = async (req, res, next) => {
+const create = async (req, res, next) => {
   logger.info(`<-----😉 -----> Category Create Controller <-----😉 ----->`);
 
   try {
@@ -21,11 +15,11 @@ const createCategories = async (req, res, next) => {
 
     if (role !== "superAdmin") throw new Error(`unAuthorized user...`);
     // find category
-    const findCategory = await findByNameService(name);
+    const findCategory = await categoryService.findByName(name);
     if (findCategory)
       throw errorObject("🤕 -> category already exists...", "duplication");
 
-    const result = await createService(name, description, parentId); // creating Category
+    const result = await categoryService.create(name, description, parentId); // creating Category
     if (result) {
       logger.info(`🤗 -> Category Created Successfully...`);
       return res.status(201).json({
@@ -40,7 +34,7 @@ const createCategories = async (req, res, next) => {
   }
 };
 
-const findAllCategories = async (req, res, next) => {
+const findAll = async (req, res, next) => {
   logger.info(`<-----😉 -----> Category FindAll Controller <-----😉 ----->`);
 
   try {
@@ -55,7 +49,7 @@ const findAllCategories = async (req, res, next) => {
     if (categoryId) filter.id = categoryId;
     if (name) filter.name = name;
 
-    const categories = await findAllService(filter);
+    const categories = await categoryService.findAll(filter);
     logger.info(`🤗 -> All Categories finded Successfully...`);
     res.status(201).json({
       success: true,
@@ -68,7 +62,7 @@ const findAllCategories = async (req, res, next) => {
   }
 };
 
-const updateCategory = async (req, res, next) => {
+const update = async (req, res, next) => {
   logger.info(`<-----😉 -----> Category Update Controller <-----😉 ----->`);
 
   try {
@@ -80,7 +74,7 @@ const updateCategory = async (req, res, next) => {
       throw errorObject("🤕 -> unAuthorized User...", "unAuthorized");
 
     // find Category
-    const findCategory = await findByIdService(id);
+    const findCategory = await categoryService.findById(id);
     if (!findCategory)
       throw errorObject("🤕 -> Category not found...", "notFound");
 
@@ -103,7 +97,7 @@ const updateCategory = async (req, res, next) => {
   }
 };
 
-const delelteCategory = async (req, res, next) => {
+const del = async (req, res, next) => {
   logger.info(`<-----😉 -----> Admin Delete Controller <-----😉 ----->`);
 
   try {
@@ -112,7 +106,7 @@ const delelteCategory = async (req, res, next) => {
 
     if (role !== "superAdmin")
       throw errorObject("🤕 -> unAuthorized User...", "unAuthorized");
-    const result = await deleteService(id);
+    const result = await categoryService.del(id);
     if (!result) throw errorObject("🤕 -> Category not Deleted...", "delete");
 
     res.status(201).json({
@@ -126,4 +120,9 @@ const delelteCategory = async (req, res, next) => {
   }
 };
 
-export { createCategories, findAllCategories, updateCategory, delelteCategory };
+export default {
+  create,
+  findAll,
+  update,
+  del,
+};

@@ -2,30 +2,25 @@ import bcrypt from "bcrypt";
 import logger from "../utils/logger.js";
 import { errorObject } from "../utils/errorObject.js";
 
-import {
-  findByEmailService,
-  createService,
-  findAllService,
-  deleteService,
-} from "../services/customer.js";
+import customerService from "../services/customer.js";
 
 import { signLoginData } from "../utils/helper/createToken.js";
 
 // ********************************************************************************** //
 // ******************************** CUSTOMER CONTROLLER ******************************** //
 // ********************************************************************************** //
-const signUpCustomer = async (req, res, next) => {
+const signUp = async (req, res, next) => {
   logger.info(`<-----😉 -----> Customer SignUp Controller <-----😉 ----->`);
 
   try {
     const { firstName, lastName, email, password, phone } = req.body;
 
     // find customer
-    const user = await findByEmailService(email);
+    const user = await customerService.findByEmail(email);
     if (user) throw errorObject("🤕 -> Customer Already Exists", "duplication");
 
     // creating customer
-    const result = await createService(
+    const result = await customerService.create(
       firstName,
       lastName,
       email,
@@ -61,14 +56,14 @@ const signUpCustomer = async (req, res, next) => {
   }
 };
 
-const loginCustomer = async (req, res, next) => {
+const login = async (req, res, next) => {
   logger.info(`<-----😉 -----> Customer Login Controller <-----😉 ----->`);
 
   try {
     const { email, password } = req.body;
 
     // find user
-    const user = await findByEmailService(email);
+    const user = await customerService.findByEmail(email);
     if (!user) throw errorObject("🤕 -> Customer not found", "notFound");
 
     // compare password
@@ -101,14 +96,14 @@ const loginCustomer = async (req, res, next) => {
   }
 };
 
-const updateCustomer = async (req, res, next) => {
+const update = async (req, res, next) => {
   logger.info(`<-----😉 -----> Customer Update Controller <-----😉 ----->`);
 
   try {
     const { userId, email } = req.user;
 
     // Find customer
-    const user = await findByEmailService(email);
+    const user = await customerService.findByEmail(email);
     if (!user) throw errorObject("🤕 -> Customer not found", "notFound");
 
     let updateInfo = {};
@@ -139,7 +134,7 @@ const changePassword = async (req, res, next) => {
     const { oldPassword, newPassword } = req.body;
 
     // validate customer
-    const customer = await findByEmailService(email);
+    const customer = await customerService.findByEmail(email);
     if (!customer) throw errorObject("🤕 -> Customer not found", "notFound");
 
     // comparing old password.
@@ -167,7 +162,7 @@ const forgetPassword = async (req, res, next) => {
     const { email } = req.body;
 
     // validate Customer
-    const customer = await findByEmailService(email);
+    const customer = await customerService.findByEmail(email);
     if (!customer) throw errorObject("🤕 -> Customer not found", "notFound");
 
     // Generate a random number between a specific range
@@ -200,7 +195,7 @@ const forgetPassword = async (req, res, next) => {
   }
 };
 
-const findAllCustomers = async (req, res, next) => {
+const findAll = async (req, res, next) => {
   logger.info(`<-----😉 -----> Customer FindAll Controller <-----😉 ----->`);
 
   try {
@@ -211,7 +206,7 @@ const findAllCustomers = async (req, res, next) => {
     customerId && (filter.id = customerId);
     firstName && (filter.firstName = firstName);
     email && (filter.email = email);
-    const customers = await findAllService(filter);
+    const customers = await customerService.findAll(filter);
     if (customers.length == 0)
       throw errorObject("🤕 -> Customer not found", "notFound");
 
@@ -227,13 +222,13 @@ const findAllCustomers = async (req, res, next) => {
   }
 };
 
-const delCustomer = async (req, res, next) => {
+const del = async (req, res, next) => {
   logger.info(`<-----😉 -----> Customer Delete Controller <-----😉 ----->`);
 
   try {
     const id = req.params.id;
 
-    const customer = await deleteService(id);
+    const customer = await customerService.del(id);
     if (customer === 0)
       throw errorObject("🤕 -> Customer not found", "notFound");
 
@@ -249,12 +244,12 @@ const delCustomer = async (req, res, next) => {
   }
 };
 
-export {
-  signUpCustomer,
-  loginCustomer,
-  updateCustomer,
+export default {
+  signUp,
+  login,
+  update,
   changePassword,
   forgetPassword,
-  findAllCustomers,
-  delCustomer,
+  findAll,
+  del,
 };

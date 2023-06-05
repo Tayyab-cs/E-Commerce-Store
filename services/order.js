@@ -5,7 +5,7 @@ import db from "../database/connect.js";
 // ********************************** ORDER SERVICE ********************************* //
 // ********************************************************************************** //
 
-const findByPkService = async (id) => {
+const findByPk = async (id) => {
   logger.info(
     `<-----😉 -----> Order find-customer-by-PK Service <-----😉 ----->`
   );
@@ -19,7 +19,7 @@ const findByPkService = async (id) => {
   }
 };
 
-const findByIdService = async (customerId) => {
+const findById = async (customerId) => {
   logger.info(
     `<-----😉 -----> Order find-address-by-id Service <-----😉 ----->`
   );
@@ -33,7 +33,7 @@ const findByIdService = async (customerId) => {
   }
 };
 
-const findProductIdService = async (id) => {
+const findProductId = async (id) => {
   logger.info(
     `<-----😉 -----> Order find-product-by-id Service <-----😉 ----->`
   );
@@ -46,7 +46,7 @@ const findProductIdService = async (id) => {
   }
 };
 
-const createOrderService = async (totalAmount, customerId) => {
+const createOrder = async (totalAmount, customerId) => {
   logger.info(`<-----😉 -----> Order Create Service <-----😉 ----->`);
   try {
     const result = await db.order.create({ totalAmount, customerId });
@@ -57,7 +57,7 @@ const createOrderService = async (totalAmount, customerId) => {
   }
 };
 
-const createOrderProductService = async (products) => {
+const createOrderProduct = async (products) => {
   logger.info(`<-----😉 -----> Ordered Product Create Service <-----😉 ----->`);
   try {
     const result = await db.orderedProduct.bulkCreate(products);
@@ -68,7 +68,7 @@ const createOrderProductService = async (products) => {
   }
 };
 
-const findAllService = async () => {
+const findAll = async () => {
   logger.info(`<-----😉 -----> Order findAll Service <-----😉 ----->`);
 
   try {
@@ -80,11 +80,11 @@ const findAllService = async () => {
   }
 };
 
-export {
-  findByPkService,
-  findByIdService,
-  findProductIdService,
-  createOrderService,
-  createOrderProductService,
-  findAllService,
+export default {
+  findByPk,
+  findById,
+  findProductId,
+  createOrder,
+  createOrderProduct,
+  findAll,
 };

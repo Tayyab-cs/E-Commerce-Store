@@ -1,31 +1,27 @@
 import express from "express";
 const route = express.Router();
 import hashPassword from "../middlewares/hashPassword.js";
-import {
-  validateSignUp,
-  validateLogin,
-  validateUpdate,
-} from "../middlewares/validate.js";
-import {
-  signUp,
-  login,
-  update,
-  changePassword,
-  forgetPassword,
-} from "../controllers/admin.js";
+import { validate } from "../middlewares/validate.js";
+import validateAdmin from "../validation/admin.js";
+import adminController from "../controllers/admin.js";
 import { decryptToken } from "../middlewares/decryptToken.js";
 
 // <-----😉 -----> Admin Api's <-----😉 ----->
-route.post("/signUp", validateSignUp, hashPassword, signUp);
-route.post("/login", validateLogin, login);
-route.patch("/update", decryptToken, update);
+route.post(
+  "/signUp",
+  validate(validateAdmin.signUp),
+  hashPassword,
+  adminController.signUp
+);
+route.post("/login", validate(validateAdmin.login), adminController.login);
+route.patch("/update", decryptToken, adminController.update);
 route.patch(
   "/changePassword",
-  validateUpdate,
+  validate(validateAdmin.update),
   decryptToken,
   hashPassword,
-  changePassword
+  adminController.changePassword
 );
-route.patch("/forgetPassword", forgetPassword);
+route.patch("/forgetPassword", adminController.forgetPassword);
 
 export default route;

@@ -1,15 +1,6 @@
 import logger from "../utils/logger.js";
 import { errorObject } from "../utils/errorObject.js";
-
-import {
-  stripeCustomerService,
-  cardTokenService,
-  createCardService,
-  createChargeService,
-  viewAllCardsService,
-  updateCardDetailsService,
-  deleteCardService,
-} from "../services/payment.js";
+import paymentService from "../services/payment.js";
 
 // Create a new customer for stripe
 const createCustomer = async (req, res, next) => {
@@ -19,7 +10,7 @@ const createCustomer = async (req, res, next) => {
   const { name, email } = req.body;
 
   try {
-    const customer = await stripeCustomerService(name, email);
+    const customer = await paymentService.stripeCustomer(name, email);
     logger.info(`🤗 -> Stripe Customer Created successfully...`);
     return res.status(200).json({
       success: true,
@@ -39,7 +30,7 @@ const addCard = async (req, res, next) => {
     req.body;
 
   try {
-    const cardToken = await cardTokenService(
+    const cardToken = await paymentService.cardToken(
       cardName,
       cardNumber,
       expMonth,
@@ -47,7 +38,10 @@ const addCard = async (req, res, next) => {
       cardCvc
     );
     console.log(cardToken);
-    const card = await createCardService(stripeCustomerId, cardToken.id);
+    const card = await paymentService.createCard(
+      stripeCustomerId,
+      cardToken.id
+    );
     console.log(card);
 
     logger.info(`🤗 -> Card Add Successfully...`);
@@ -68,7 +62,7 @@ const viewAllCards = async (req, res, next) => {
   let cards = [];
   try {
     const { customerId } = req.body;
-    const savedCards = await viewAllCardsService(customerId);
+    const savedCards = await paymentService.viewAllCards(customerId);
     console.log(savedCards);
     const cardDetails = Object.values(savedCards.data);
 
@@ -100,7 +94,7 @@ const updateCardDetails = async (req, res, next) => {
   const { customerId, cardId, cardName, cardExpMonth, cardExpYear } = req.body;
 
   try {
-    const card = await updateCardDetailsService(
+    const card = await paymentService.updateCardDetails(
       customerId,
       cardId,
       cardName,
@@ -125,7 +119,7 @@ const deleteCard = async (req, res) => {
   const { customerId, cardId } = req.body;
 
   try {
-    const deleteCard = await deleteCardService(customerId, cardId);
+    const deleteCard = await paymentService.deleteCard(customerId, cardId);
     logger.info(`🤗 -> Card Deleted Successfully...`);
     return res.status(200).json({
       success: true,
@@ -146,7 +140,7 @@ const createCharge = async (req, res, next) => {
   const { cardId, stripeCustomerId, amount } = req.body;
 
   try {
-    const createCharge = await createChargeService(
+    const createCharge = await paymentService.createCharge(
       cardId,
       stripeCustomerId,
       amount
@@ -169,7 +163,7 @@ const createCharge = async (req, res, next) => {
   }
 };
 
-export {
+export default {
   createCustomer,
   addCard,
   viewAllCards,

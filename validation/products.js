@@ -1,7 +1,7 @@
 import joi from "joi";
 
 // <-----😉 -----> validate Create Product object keys <-----😉 ----->
-const createProduct = joi.object().keys({
+const create = joi.object().keys({
   name: joi.string().required(),
   description: joi.string().required(),
   price: joi.number().required(),
@@ -9,4 +9,4 @@ const createProduct = joi.object().keys({
   categoryId: joi.number(),
 });
 
-export { createProduct };
+export default { create };

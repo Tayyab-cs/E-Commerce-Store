@@ -1,7 +1,7 @@
 import joi from "joi";
 
 // <-----😉 -----> validate Image object keys <-----😉 ----->
-const validateImage = joi.object({
+const image = joi.object({
   fieldname: joi.string().required(),
   originalname: joi.string().required(),
   encoding: joi.string().required(),
@@ -12,4 +12,4 @@ const validateImage = joi.object({
   size: joi.number().max(5242880).required(), // Maximum file size in bytes (e.g., 5MB)
 });
 
-export default validateImage;
+export default { image };

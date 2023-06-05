@@ -23,4 +23,4 @@ const createCharge = joi.object().keys({
   amount: joi.number().required(),
 });
 
-export { createStripeCustomer, addCard, createCharge };
+export default { createStripeCustomer, addCard, createCharge };

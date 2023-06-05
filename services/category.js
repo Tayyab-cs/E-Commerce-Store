@@ -5,7 +5,7 @@ import db from "../database/connect.js";
 // ******************************** CATEGORY SERVICE ******************************** //
 // ********************************************************************************** //
 
-const findByIdService = async (id) => {
+const findById = async (id) => {
   logger.info(`<-----😉 -----> Category Find-by-Name Service <-----😉 ----->`);
   try {
     const result = await db.category.findOne({ where: { id } });
@@ -16,7 +16,7 @@ const findByIdService = async (id) => {
   }
 };
 
-const findByNameService = async (name) => {
+const findByName = async (name) => {
   logger.info(`<-----😉 -----> Category Find-by-Name Service <-----😉 ----->`);
   try {
     const result = await db.category.findOne({ where: { name } });
@@ -27,7 +27,7 @@ const findByNameService = async (name) => {
   }
 };
 
-const createService = async (name, description, parentId) => {
+const create = async (name, description, parentId) => {
   logger.info(`<-----😉 -----> Category Create Service <-----😉 ----->`);
   try {
     const result = await db.category.create({
@@ -42,7 +42,7 @@ const createService = async (name, description, parentId) => {
   }
 };
 
-const findAllService = async (filter) => {
+const findAll = async (filter) => {
   logger.info(`<-----😉 -----> Category FindAll Service <-----😉 ----->`);
 
   try {
@@ -54,7 +54,7 @@ const findAllService = async (filter) => {
   }
 };
 
-const deleteService = async (id) => {
+const del = async (id) => {
   logger.info(`<-----😉 -----> Category Delete Service <-----😉 ----->`);
   console.log(id);
 
@@ -67,10 +67,4 @@ const deleteService = async (id) => {
   }
 };
 
-export {
-  findByIdService,
-  findByNameService,
-  createService,
-  findAllService,
-  deleteService,
-};
+export default { findById, findByName, create, findAll, del };

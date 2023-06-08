@@ -1,18 +1,18 @@
-import logger from "../utils/logger.js";
-import db from "../database/connect.js";
+import logger from '../utils/logger';
+import db from '../database/connect';
 
 const isCustomer = async (req, res, next) => {
-  logger.info(`<-------😉 -------> isCustomer Middleware <-------😉 ------->`);
+  logger.info('<-------😉 -------> isCustomer Middleware <-------😉 ------->');
 
   try {
-    const { userId, email } = req.user;
+    const { email } = req.user;
     const customer = await db.customer.findOne({ where: { email } });
-    if (!customer) throw new Error(`Customer not Exists...`);
+    if (!customer) throw new Error('Customer not Exists...');
     next();
   } catch (error) {
-    logger.error(`User is not Admin...`);
+    logger.error('User is not Admin...');
     return next(error);
   }
 };
 
-export { isCustomer };
+export default isCustomer;

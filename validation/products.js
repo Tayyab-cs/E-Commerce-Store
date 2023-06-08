@@ -1,4 +1,4 @@
-import joi from "joi";
+import joi from 'joi';
 
 // <-----😉 -----> validate Create Product object keys <-----😉 ----->
 const create = joi.object().keys({

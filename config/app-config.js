@@ -3,4 +3,4 @@ const config = {
   alter: false,
 };
 
-export { config };
+export default config;

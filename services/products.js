@@ -1,12 +1,12 @@
-import logger from "../utils/logger.js";
-import db from "../database/connect.js";
+import logger from '../utils/logger';
+import db from '../database/connect';
 
 // ********************************************************************************** //
 // ******************************** PRODUCT SERVICE ******************************** //
 // ********************************************************************************** //
 
 const findByName = async (name) => {
-  logger.info(`<-----😉 -----> Product Find-by-Name Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Product Find-by-Name Service <-----😉 ----->');
   try {
     const result = await db.products.findOne({ where: { name } });
     return result;
@@ -17,7 +17,7 @@ const findByName = async (name) => {
 };
 
 const findByPk = async (productId) => {
-  logger.info(`<-----😉 -----> Product Find-by-Pk Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Product Find-by-Pk Service <-----😉 ----->');
 
   try {
     const result = await db.products.findByPk(productId);
@@ -29,7 +29,7 @@ const findByPk = async (productId) => {
 };
 
 const findById = async (categoryId) => {
-  logger.info(`<-----😉 -----> Product Find-by-ID Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Product Find-by-ID Service <-----😉 ----->');
   try {
     const result = await db.category.findByPk(categoryId);
     return result;
@@ -40,7 +40,7 @@ const findById = async (categoryId) => {
 };
 
 const create = async (name, description, price, quantity, categoryId) => {
-  logger.info(`<-----😉 -----> Product Create Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Product Create Service <-----😉 ----->');
   try {
     const result = await db.products.create({
       name,
@@ -57,10 +57,10 @@ const create = async (name, description, price, quantity, categoryId) => {
 };
 
 const findAll = async (filter, sortOptions, offset, pageSize) => {
-  logger.info(`<-----😉 -----> Product Find Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Product Find Service <-----😉 ----->');
 
   try {
-    let result = await db.products.findAll({
+    const result = await db.products.findAll({
       where: filter,
       order: sortOptions,
       offset,
@@ -76,11 +76,11 @@ const findAll = async (filter, sortOptions, offset, pageSize) => {
 
 const findAllImages = async (productIds) => {
   logger.info(
-    `<-----😉 -----> Product Find All Images Service <-----😉 ----->`
+    '<-----😉 -----> Product Find All Images Service <-----😉 ----->',
   );
 
   try {
-    let result = await db.image.findAll({ where: { id: productIds } });
+    const result = await db.image.findAll({ where: { id: productIds } });
     return result;
   } catch (error) {
     logger.error(error);
@@ -89,14 +89,14 @@ const findAllImages = async (productIds) => {
 };
 
 const del = async (productId) => {
-  logger.info(`<-----😉 -----> Product Delete Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Product Delete Service <-----😉 ----->');
 
   try {
-    await db.orderedProduct.destroy({ where: { productId: productId } });
-    await db.image.destroy({ where: { productId: prod } });
+    await db.orderedProduct.destroy({ where: { productId } });
+    await db.image.destroy({ where: { productId } });
     const result = await db.products.destroy({ where: { id: productId } });
 
-    if (!result) throw new Error(`Product not found...`);
+    if (!result) throw new Error('Product not found...');
     return result;
   } catch (error) {
     logger.error(error);

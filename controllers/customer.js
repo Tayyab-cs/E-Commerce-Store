@@ -1,23 +1,22 @@
-import bcrypt from "bcrypt";
-import logger from "../utils/logger.js";
-import { errorObject } from "../utils/errorObject.js";
-
-import customerService from "../services/customer.js";
-
-import { signLoginData } from "../utils/helper/createToken.js";
+import bcrypt from 'bcrypt';
+import logger from '../utils/logger';
+import errorObject from '../utils/errorObject';
+import customerService from '../services/customer';
+import signLoginData from '../utils/helper/createToken';
+import sendEmail from '../utils/sendEmail';
 
 // ********************************************************************************** //
 // ******************************** CUSTOMER CONTROLLER ******************************** //
 // ********************************************************************************** //
 const signUp = async (req, res, next) => {
-  logger.info(`<-----😉 -----> Customer SignUp Controller <-----😉 ----->`);
+  logger.info('<-----😉 -----> Customer SignUp Controller <-----😉 ----->');
 
   try {
     const { firstName, lastName, email, password, phone } = req.body;
 
     // find customer
     const user = await customerService.findByEmail(email);
-    if (user) throw errorObject("🤕 -> Customer Already Exists", "duplication");
+    if (user) throw errorObject('🤕 -> Customer Already Exists', 'duplication');
 
     // creating customer
     const result = await customerService.create(
@@ -25,7 +24,7 @@ const signUp = async (req, res, next) => {
       lastName,
       email,
       password,
-      phone
+      phone,
     );
 
     const payload = {
@@ -33,13 +32,13 @@ const signUp = async (req, res, next) => {
       email: result.email,
     };
 
-    let accessToken = await signLoginData({ data: payload }, 120000000),
-      refreshToken = await signLoginData({ data: "" }, 180000000);
+    const accessToken = await signLoginData({ data: payload }, 120000000);
+    const refreshToken = await signLoginData({ data: '' }, 180000000);
 
-    logger.info(`🤗 -> Customer SignUp Successfully...`);
+    logger.info('🤗 -> Customer SignUp Successfully...');
     return res.status(201).json({
       success: true,
-      message: "🤗 -> Customer SignUp Successfully...",
+      message: '🤗 -> Customer SignUp Successfully...',
       customer: {
         firstName,
         lastName,
@@ -51,24 +50,24 @@ const signUp = async (req, res, next) => {
       },
     });
   } catch (error) {
-    logger.error(`😡 -> SignUp Failed...`);
+    logger.error('😡 -> SignUp Failed...');
     return next(error);
   }
 };
 
 const login = async (req, res, next) => {
-  logger.info(`<-----😉 -----> Customer Login Controller <-----😉 ----->`);
+  logger.info('<-----😉 -----> Customer Login Controller <-----😉 ----->');
 
   try {
     const { email, password } = req.body;
 
     // find user
     const user = await customerService.findByEmail(email);
-    if (!user) throw errorObject("🤕 -> Customer not found", "notFound");
+    if (!user) throw errorObject('🤕 -> Customer not found', 'notFound');
 
     // compare password
     const result = await bcrypt.compare(password, user.password);
-    if (!result) throw errorObject("🤕 -> Invalid Password", "unAuthorized");
+    if (!result) throw errorObject('🤕 -> Invalid Password', 'unAuthorized');
 
     // create token
     const payload = {
@@ -76,13 +75,13 @@ const login = async (req, res, next) => {
       email: user.email,
     };
 
-    let accessToken = await signLoginData({ data: payload }, 120000000),
-      refreshToken = await signLoginData({ data: "" }, 180000000);
+    const accessToken = await signLoginData({ data: payload }, 120000000);
+    const refreshToken = await signLoginData({ data: '' }, 180000000);
 
-    logger.info(`🤗 -> Customer login Successfully...`);
+    logger.info('🤗 -> Customer login Successfully...');
     return res.status(201).json({
       success: true,
-      message: "🤗 -> Customer login Successfully...",
+      message: '🤗 -> Customer login Successfully...',
       customer: {
         email,
         password,
@@ -91,68 +90,68 @@ const login = async (req, res, next) => {
       },
     });
   } catch (error) {
-    logger.error(`😡 -> Login Failed...`);
+    logger.error('😡 -> Login Failed...');
     return next(error);
   }
 };
 
 const update = async (req, res, next) => {
-  logger.info(`<-----😉 -----> Customer Update Controller <-----😉 ----->`);
+  logger.info('<-----😉 -----> Customer Update Controller <-----😉 ----->');
 
   try {
-    const { userId, email } = req.user;
+    const { email } = req.user;
 
     // Find customer
     const user = await customerService.findByEmail(email);
-    if (!user) throw errorObject("🤕 -> Customer not found", "notFound");
+    if (!user) throw errorObject('🤕 -> Customer not found', 'notFound');
 
-    let updateInfo = {};
+    const updateInfo = {};
     const { firstName, lastName, phone } = req.body;
 
-    firstName && (updateInfo.firstName = firstName);
-    lastName && (updateInfo.lastName = lastName);
-    phone && (updateInfo.phone = phone);
+    if (firstName) updateInfo.firstName = firstName;
+    if (lastName) updateInfo.lastName = lastName;
+    if (phone) updateInfo.phone = phone;
 
     // Update password
     const customer = await user.update(updateInfo);
 
-    logger.info(`🤗 -> Customer Updated Successfully...`);
+    logger.info('🤗 -> Customer Updated Successfully...');
     return res.status(201).json({
       success: true,
-      message: "🤗 -> Customer Updated Successfully...",
-      customer: customer,
+      message: '🤗 -> Customer Updated Successfully...',
+      customer,
     });
   } catch (error) {
-    logger.error(`😡 -> Customer not Updated...`);
+    logger.error('😡 -> Customer not Updated...');
     return next(error);
   }
 };
 
 const changePassword = async (req, res, next) => {
   try {
-    const { userId, email } = req.user;
+    const { email } = req.user;
     const { oldPassword, newPassword } = req.body;
 
     // validate customer
     const customer = await customerService.findByEmail(email);
-    if (!customer) throw errorObject("🤕 -> Customer not found", "notFound");
+    if (!customer) throw errorObject('🤕 -> Customer not found', 'notFound');
 
     // comparing old password.
     const result = await bcrypt.compare(oldPassword, customer.password);
-    if (!result) throw errorObject(`🤕 ->Invalid Password`, "unAuthorized");
+    if (!result) throw errorObject('🤕 ->Invalid Password', 'unAuthorized');
 
     customer.password = newPassword;
 
     customer.save();
 
-    logger.info(`🤗 -> Password Changed Successfully...`);
+    logger.info('🤗 -> Password Changed Successfully...');
     return res.status(201).json({
       success: true,
-      message: "🤗 -> Password Changed Successfully...",
-      customer: customer,
+      message: '🤗 -> Password Changed Successfully...',
+      customer,
     });
   } catch (error) {
-    logger.error(`😡 -> Password not changed Successfully...`);
+    logger.error('😡 -> Password not changed Successfully...');
     return next(error);
   }
 };
@@ -163,10 +162,11 @@ const forgetPassword = async (req, res, next) => {
 
     // validate Customer
     const customer = await customerService.findByEmail(email);
-    if (!customer) throw errorObject("🤕 -> Customer not found", "notFound");
+    if (!customer) throw errorObject('🤕 -> Customer not found', 'notFound');
 
     // Generate a random number between a specific range
     let resetPassword = 0;
+    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < 6; i++) {
       const min = 1;
       const max = 10;
@@ -175,71 +175,73 @@ const forgetPassword = async (req, res, next) => {
     }
 
     // Sending Email...
-    await sendEmail(email, `RESET PASSWORD`, resetPassword);
+    await sendEmail(email, 'RESET PASSWORD', resetPassword);
 
     // hash password...
     const hashedPassword = await bcrypt.hash(resetPassword, 10);
 
     // Update Password
-    admin.password = hashedPassword;
-    admin.save();
+    customer.password = hashedPassword;
+    customer.save();
 
-    logger.info(`🤗 -> Password Sent to Your Mail Successfully...`);
+    logger.info('🤗 -> Password Sent to Your Mail Successfully...');
     return res.status(201).json({
       success: true,
-      message: "🤗 -> Password Sent to Your Mail Successfully...",
+      message: '🤗 -> Password Sent to Your Mail Successfully...',
     });
   } catch (error) {
-    logger.error(`😡 -> Password not changed Successfully...`);
+    logger.error('😡 -> Password not changed Successfully...');
     return next(error);
   }
 };
 
 const findAll = async (req, res, next) => {
-  logger.info(`<-----😉 -----> Customer FindAll Controller <-----😉 ----->`);
+  logger.info('<-----😉 -----> Customer FindAll Controller <-----😉 ----->');
 
   try {
     const { customerId, firstName, email } = req.query;
 
     // filter...
     const filter = {};
-    customerId && (filter.id = customerId);
-    firstName && (filter.firstName = firstName);
-    email && (filter.email = email);
+    if (customerId) filter.id = customerId;
+    if (firstName) filter.firstName = firstName;
+    if (email) filter.email = email;
     const customers = await customerService.findAll(filter);
-    if (customers.length == 0)
-      throw errorObject("🤕 -> Customer not found", "notFound");
+    if (customers.length === 0) {
+      throw errorObject('🤕 -> Customer not found', 'notFound');
+    }
 
-    logger.info(`🤗 -> All Customers finded Successfully...`);
+    logger.info('🤗 -> All Customers finded Successfully...');
     return res.status(201).json({
       success: true,
-      message: "🤗 -> All Customers finded Successfully...",
+      message: '🤗 -> All Customers finded Successfully...',
       customer: customers,
     });
   } catch (error) {
-    logger.error(`😡 -> Customer not Finded...`);
+    logger.error('😡 -> Customer not Finded...');
     return next(error);
   }
 };
 
 const del = async (req, res, next) => {
-  logger.info(`<-----😉 -----> Customer Delete Controller <-----😉 ----->`);
+  logger.info('<-----😉 -----> Customer Delete Controller <-----😉 ----->');
 
   try {
-    const id = req.params.id;
+    const { id } = req.params.id;
 
     const customer = await customerService.del(id);
-    if (customer === 0)
-      throw errorObject("🤕 -> Customer not found", "notFound");
+    if (customer === 0) {
+      throw errorObject('🤕 -> Customer not found', 'notFound');
+    }
 
-    logger.info(`🤗 -> Customer Deleted Successfully...`);
+    logger.info('🤗 -> Customer Deleted Successfully...');
     return res.status(200).json({
       success: true,
-      message: `🤗 -> Customer Deleted Successfully...`,
-      customer: customer,
+      message: '🤗 -> Customer Deleted Successfully...',
+      customer,
     });
   } catch (error) {
-    logger.error(`😡 -> Customer not Deleted...`);
+    logger.error('😡 -> Customer not Deleted...');
     return next(error);
   }
 };

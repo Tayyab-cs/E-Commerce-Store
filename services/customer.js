@@ -1,12 +1,12 @@
-import logger from "../utils/logger.js";
-import db from "../database/connect.js";
+import logger from '../utils/logger';
+import db from '../database/connect';
 
 // ********************************************************************************** //
 // ********************************** CUSTOMER SERVICE ********************************* //
 // ********************************************************************************** //
 
 const findByEmail = async (email) => {
-  logger.info(`<-----😉 -----> Customer SignUp Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Customer SignUp Service <-----😉 ----->');
   try {
     const result = await db.customer.findOne({ where: { email } });
     return result;
@@ -17,7 +17,7 @@ const findByEmail = async (email) => {
 };
 
 const create = async (firstName, lastName, email, password, phone) => {
-  logger.info(`<-----😉 -----> Customer Create Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Customer Create Service <-----😉 ----->');
   try {
     const result = await db.customer.create({
       firstName,
@@ -34,7 +34,7 @@ const create = async (firstName, lastName, email, password, phone) => {
 };
 
 const findAll = async (filter) => {
-  logger.info(`<-----😉 -----> Customer findAll Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Customer findAll Service <-----😉 ----->');
 
   try {
     const result = await db.customer.findAll({ where: filter });
@@ -46,7 +46,7 @@ const findAll = async (filter) => {
 };
 
 const findOne = async (id) => {
-  logger.info(`<-----😉 -----> Customer findOne Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Customer findOne Service <-----😉 ----->');
 
   try {
     const result = await db.customer.findByPk(id);
@@ -58,7 +58,7 @@ const findOne = async (id) => {
 };
 
 const del = async (id) => {
-  logger.info(`<-----😉 -----> Customer Delete Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Customer Delete Service <-----😉 ----->');
 
   try {
     const result = await db.customer.destroy({ where: { id } });
@@ -69,4 +69,10 @@ const del = async (id) => {
   }
 };
 
-export default { findByEmail, create, findAll, findOne, del };
+export default {
+  findByEmail,
+  create,
+  findAll,
+  findOne,
+  del,
+};

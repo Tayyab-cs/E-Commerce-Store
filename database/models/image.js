@@ -1,6 +1,6 @@
 export default (sequelize, DataTypes) => {
-  var Images = sequelize.define(
-    "Images",
+  const Images = sequelize.define(
+    'Images',
     {
       name: {
         type: DataTypes.STRING,
@@ -13,17 +13,17 @@ export default (sequelize, DataTypes) => {
       productId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "Products",
-          key: "id",
+          model: 'Products',
+          key: 'id',
         },
       },
     },
-    { freezeTableName: true } // used to display table name same a defined.
+    { freezeTableName: true }, // used to display table name same a defined.
   );
 
-  // <--------------------------> Association one to one images-to-products <------------😉------------>
-  Images.associate = function (models) {
-    Images.belongsTo(models.Products, { foreignKey: productId });
+  // <-------😉-------> Association one to one images-to-products <-------😉------->
+  Images.associate = (models) => {
+    Images.belongsTo(models.Products);
   };
 
   return Images;

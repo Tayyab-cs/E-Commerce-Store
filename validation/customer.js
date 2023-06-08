@@ -1,4 +1,4 @@
-import joi from "joi";
+import joi from 'joi';
 
 // <-----😉 -----> validate Customer SignUp object keys <-----😉 ----->
 const signUp = joi.object().keys({

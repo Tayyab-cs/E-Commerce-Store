@@ -1,12 +1,12 @@
-import logger from "../utils/logger.js";
-import db from "../database/connect.js";
+import logger from '../utils/logger';
+import db from '../database/connect';
 
 // ********************************************************************************** //
 // ********************************** ADDRESS SERVICE ********************************* //
 // ********************************************************************************** //
 
 const findById = async (customerId) => {
-  logger.info(`<-----😉 -----> Address find-by-Id Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Address find-by-Id Service <-----😉 ----->');
   try {
     const result = await db.customer.findByPk(customerId);
     return result;
@@ -23,10 +23,9 @@ const create = async (
   city,
   state,
   postalCode,
-  customerId
+  customerId,
 ) => {
-  logger.info(`<-----😉 -----> Address Create Service <-----😉 ----->`);
-  console.log(state);
+  logger.info('<-----😉 -----> Address Create Service <-----😉 ----->');
   try {
     const result = await db.address.create({
       houseNo,
@@ -45,7 +44,7 @@ const create = async (
 };
 
 const update = async (updateInfo, customerId) => {
-  logger.info(`<-----😉 -----> Address Update Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Address Update Service <-----😉 ----->');
 
   try {
     const result = await db.address.update(updateInfo, {
@@ -59,7 +58,7 @@ const update = async (updateInfo, customerId) => {
 };
 
 const findAll = async (filter) => {
-  logger.info(`<-----😉 -----> Address findAll Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Address findAll Service <-----😉 ----->');
 
   try {
     const result = await db.address.findAll({ where: filter });
@@ -71,7 +70,7 @@ const findAll = async (filter) => {
 };
 
 const del = async (id) => {
-  logger.info(`<-----😉 -----> Address findAll Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Address findAll Service <-----😉 ----->');
 
   try {
     const result = await db.address.destroy({ where: { id } });
@@ -82,4 +81,10 @@ const del = async (id) => {
   }
 };
 
-export default { findById, create, update, findAll, del };
+export default {
+  findById,
+  create,
+  update,
+  findAll,
+  del,
+};

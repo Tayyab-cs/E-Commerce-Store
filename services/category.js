@@ -1,12 +1,12 @@
-import logger from "../utils/logger.js";
-import db from "../database/connect.js";
+import logger from '../utils/logger';
+import db from '../database/connect';
 
 // ********************************************************************************** //
 // ******************************** CATEGORY SERVICE ******************************** //
 // ********************************************************************************** //
 
 const findById = async (id) => {
-  logger.info(`<-----😉 -----> Category Find-by-Name Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Category Find-by-Name Service <-----😉 ----->');
   try {
     const result = await db.category.findOne({ where: { id } });
     return result;
@@ -17,7 +17,7 @@ const findById = async (id) => {
 };
 
 const findByName = async (name) => {
-  logger.info(`<-----😉 -----> Category Find-by-Name Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Category Find-by-Name Service <-----😉 ----->');
   try {
     const result = await db.category.findOne({ where: { name } });
     return result;
@@ -28,7 +28,7 @@ const findByName = async (name) => {
 };
 
 const create = async (name, description, parentId) => {
-  logger.info(`<-----😉 -----> Category Create Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Category Create Service <-----😉 ----->');
   try {
     const result = await db.category.create({
       name,
@@ -43,7 +43,7 @@ const create = async (name, description, parentId) => {
 };
 
 const findAll = async (filter) => {
-  logger.info(`<-----😉 -----> Category FindAll Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Category FindAll Service <-----😉 ----->');
 
   try {
     const result = await db.category.findAll({ where: filter });
@@ -55,8 +55,7 @@ const findAll = async (filter) => {
 };
 
 const del = async (id) => {
-  logger.info(`<-----😉 -----> Category Delete Service <-----😉 ----->`);
-  console.log(id);
+  logger.info('<-----😉 -----> Category Delete Service <-----😉 ----->');
 
   try {
     const result = await db.category.destroy({ where: { id } });
@@ -67,4 +66,10 @@ const del = async (id) => {
   }
 };
 
-export default { findById, findByName, create, findAll, del };
+export default {
+  findById,
+  findByName,
+  create,
+  findAll,
+  del,
+};

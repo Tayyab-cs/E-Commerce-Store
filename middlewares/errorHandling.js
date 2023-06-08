@@ -1,12 +1,12 @@
-import logger from "../utils/logger.js";
+import logger from '../utils/logger';
 
-const errorHandler = (error, req, res, next) => {
-  logger.error("<------😡------> Error MIDDLEWARE Triggered <------😡------>");
-  logger.error("************************************************************");
+const errorHandler = (error, req, res) => {
+  logger.error('<------😡------> Error MIDDLEWARE Triggered <------😡------>');
+  logger.error('************************************************************');
   logger.error(error);
-  logger.error("************************************************************");
+  logger.error('************************************************************');
 
-  if (error.name === "badRequest") {
+  if (error.name === 'badRequest') {
     return res
       .status(400)
       .json({
@@ -17,7 +17,7 @@ const errorHandler = (error, req, res, next) => {
       })
       .end();
   }
-  if (error.name === "unAuthorized") {
+  if (error.name === 'unAuthorized') {
     return res
       .status(401)
       .json({
@@ -28,7 +28,7 @@ const errorHandler = (error, req, res, next) => {
       })
       .end();
   }
-  if (error.name === "permission") {
+  if (error.name === 'permission') {
     return res
       .status(403)
       .json({
@@ -39,7 +39,7 @@ const errorHandler = (error, req, res, next) => {
       })
       .end();
   }
-  if (error.name === "duplication") {
+  if (error.name === 'duplication') {
     return res
       .status(409)
       .json({
@@ -50,7 +50,7 @@ const errorHandler = (error, req, res, next) => {
       })
       .end();
   }
-  if (error.name === "notFound") {
+  if (error.name === 'notFound') {
     return res
       .status(404)
       .json({
@@ -61,15 +61,12 @@ const errorHandler = (error, req, res, next) => {
       })
       .end();
   }
-  if (error.name === "delete") {
+  if (error.name === 'delete') {
     return res
       .status(409)
       .json({
         success: false,
         type: error.name,
-        message: isProduction
-          ? "There was some error. Please try again later"
-          : error.message,
       })
       .end();
   }
@@ -94,11 +91,10 @@ const errorHandler = (error, req, res, next) => {
     .status(500)
     .json({
       success: false,
-      message: "Unexpected internal server error!",
+      message: 'Unexpected internal server error!',
       details: error.details,
     })
     .end();
 };
 
-export { errorHandler };
-// the proper way is to extend error class and define and throw you custom error; but for this one, that works
+export default errorHandler;

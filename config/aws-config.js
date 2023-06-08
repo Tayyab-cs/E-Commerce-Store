@@ -1,4 +1,5 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
+
 dotenv.config();
 
 const { AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION } = process.env;

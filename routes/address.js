@@ -1,23 +1,23 @@
-import express from "express";
-const route = express.Router();
+import express from 'express';
+import validate from '../middlewares/validate';
+import validateAddress from '../validation/address';
+import decryptToken from '../middlewares/decryptToken';
+import isCustomer from '../middlewares/isCustomer';
+import isAdmin from '../middlewares/isAdmin';
+import addressController from '../controllers/address';
 
-import { validate } from "../middlewares/validate.js";
-import validateAddress from "../validation/address.js";
-import { decryptToken } from "../middlewares/decryptToken.js";
-import { isCustomer } from "../middlewares/isCustomer.js";
-import { isAdmin } from "../middlewares/isAdmin.js";
-import addressController from "../controllers/address.js";
+const route = express.Router();
 
 // <-----😉 -----> Address Api's <-----😉 ----->
 route.post(
-  "/create",
+  '/create',
   validate(validateAddress.address),
   decryptToken,
   isCustomer,
-  addressController.create
+  addressController.create,
 );
-route.patch("/update", decryptToken, isCustomer, addressController.update);
-route.get("/findAll", decryptToken, isAdmin, addressController.findAll);
-route.delete("/delete/:id", decryptToken, isCustomer, addressController.del);
+route.patch('/update', decryptToken, isCustomer, addressController.update);
+route.get('/findAll', decryptToken, isAdmin, addressController.findAll);
+route.delete('/delete/:id', decryptToken, isCustomer, addressController.del);
 
 export default route;

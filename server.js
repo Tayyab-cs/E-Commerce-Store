@@ -1,19 +1,20 @@
-import express from "express";
-const app = express();
+import express from 'express';
+import dotenv from 'dotenv';
+import db from './database/connect';
+import errorHandler from './middlewares/errorHandling';
+import superAdmin from './dbSeed/superAdmin';
+import config from './config/app-config';
+import router from './routes/index';
+import logger from './utils/logger';
 
-import dotenv from "dotenv";
 dotenv.config();
-const { PORT } = process.env;
 
-import db from "./database/connect.js";
-import { errorHandler } from "./middlewares/errorHandling.js";
-import { superAdmin } from "./dbSeed/superAdmin.js";
-import { config } from "./config/app-config.js";
-import { router } from "./routes/index.js";
+const app = express();
+const { PORT } = process.env;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/api", router);
+app.use('/api', router);
 
 // <------------😉------------> using error handling middleware <------------😉------------>
 app.use(errorHandler);
@@ -21,7 +22,7 @@ app.use(errorHandler);
 // <------------😉------------> Listening Server <------------😉------------>
 db.sequelize.sync({ force: config.force, alter: config.alter }).then(() => {
   app.listen(PORT || 5000, () => {
-    console.log(`Server is running on PORT: ${PORT} ...`);
+    logger.info(`Server is running on PORT: ${PORT} ...`);
   });
 
   // calling superAdmin seeder...

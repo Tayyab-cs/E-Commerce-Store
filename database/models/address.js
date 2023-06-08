@@ -1,6 +1,6 @@
 export default (sequelize, DataTypes) => {
-  var Address = sequelize.define(
-    "Address",
+  const Address = sequelize.define(
+    'Address',
     {
       houseNo: {
         type: DataTypes.STRING,
@@ -30,20 +30,20 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "Customer",
-          key: "id",
+          model: 'Customer',
+          key: 'id',
         },
       },
     },
     {
       paranoid: true, // used for soft delete...
       freezeTableName: true, // used to display table name same a defined...
-    }
+    },
   );
 
-  // <------------😉------------> Association one to one Address-to-Customer <------------😉------------>
-  Address.associate = function (models) {
-    Address.belongsTo(models.Customer, { foreignKey: "customerId" });
+  // <-------😉-------> Association one to one Address-to-Customer <-------😉-------->
+  Address.associate = (models) => {
+    Address.belongsTo(models.Customer, { foreignKey: 'customerId' });
   };
 
   return Address;

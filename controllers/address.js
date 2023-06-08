@@ -1,21 +1,20 @@
-import logger from "../utils/logger.js";
-import { errorObject } from "../utils/errorObject.js";
-
-import addressService from "../services/address.js";
-
+import logger from '../utils/logger';
+import errorObject from '../utils/errorObject';
+import addressService from '../services/address';
 // ********************************************************************************** //
 // ******************************** ADDRESS CONTROLLER ******************************** //
 // ********************************************************************************** //
 const create = async (req, res, next) => {
-  logger.info(`<-----😉 -----> Address Create Controller <-----😉 ----->`);
+  logger.info('<-----😉 -----> Address Create Controller <-----😉 ----->');
 
   try {
+    // eslint-disable-next-line operator-linebreak
     const { houseNo, streetNo, area, city, state, postalCode, customerId } =
       req.body;
 
     // find customer
     const customer = await addressService.findById(customerId);
-    if (!customer) throw errorObject("🤕 -> Customer not found", "notFound");
+    if (!customer) throw errorObject('🤕 -> Customer not found', 'notFound');
 
     // creating address
     const result = await addressService.create(
@@ -25,102 +24,104 @@ const create = async (req, res, next) => {
       city,
       state,
       postalCode,
-      customerId
+      customerId,
     );
     if (result) {
-      logger.info(`🤗 -> Address Created Successfully `);
+      logger.info('🤗 -> Address Created Successfully ');
       res.status(201).json({
         success: true,
-        successMessage: `🤗 -> Address Created Successfully`,
+        successMessage: '🤗 -> Address Created Successfully',
         address: result,
       });
     }
   } catch (error) {
-    logger.error(`😡 -> Address not Created...`);
+    logger.error('😡 -> Address not Created...');
     return next(error);
   }
 };
 
 const update = async (req, res, next) => {
-  logger.info(`<-----😉 -----> Address Update Controller <-----😉 ----->`);
+  logger.info('<-----😉 -----> Address Update Controller <-----😉 ----->');
 
   try {
-    let { houseNo, streetNo, area, city, state, postalCode, customerId } =
+    // eslint-disable-next-line operator-linebreak
+    const { houseNo, streetNo, area, city, state, postalCode, customerId } =
       req.body;
 
-    let updateInfo = {};
+    const updateInfo = {};
     // find customer
     const user = await addressService.findById(customerId);
-    if (!user) throw errorObject("🤕 -> Customer not found", "notFound");
-    houseNo && (updateInfo.houseNo = houseNo);
-    streetNo && (updateInfo.streetNo = streetNo);
-    area && (updateInfo.area = area);
-    city && (updateInfo.city = city);
-    state && (updateInfo.state = state);
-    postalCode && (updateInfo.postalCode = postalCode);
-    customerId && (updateInfo.customerId = customerId);
+    if (!user) throw errorObject('🤕 -> Customer not found', 'notFound');
+    if (houseNo) updateInfo.houseNo = houseNo;
+    if (streetNo) updateInfo.streetNo = streetNo;
+    if (area) updateInfo.area = area;
+    if (city) updateInfo.city = city;
+    if (state) updateInfo.state = state;
+    if (postalCode) updateInfo.postalCode = postalCode;
+    if (customerId) updateInfo.customerId = customerId;
 
     // Update password
     const result = await addressService.update(updateInfo, customerId);
 
-    logger.info(`🤗 -> Address updated Successfully `);
+    logger.info('🤗 -> Address updated Successfully ');
     res.status(201).json({
       success: true,
-      successMessage: `🤗 -> Address updated Successfully `,
+      successMessage: '🤗 -> Address updated Successfully ',
       address: result,
     });
   } catch (error) {
-    logger.error(`😡 -> Address not Updated...`);
+    logger.error('😡 -> Address not Updated...');
     return next(error);
   }
 };
 
 const findAll = async (req, res, next) => {
-  logger.info(`<-----😉 -----> Address FindAll Controller <-----😉 ----->`);
+  logger.info('<-----😉 -----> Address FindAll Controller <-----😉 ----->');
 
   try {
+    // eslint-disable-next-line operator-linebreak
     const { customerId, houseNo, streetNo, area, city, state, postalCode } =
       req.query;
 
     // Filter...
     const filter = {};
-    customerId && (filter.customerId = customerId);
-    houseNo && (filter.houseNo = houseNo);
-    streetNo && (filter.streetNo = streetNo);
-    area && (filter.area = area);
-    city && (filter.city = city);
-    state && (filter.state = state);
-    postalCode && (filter.postalCode = postalCode);
+    if (customerId) filter.customerId = customerId;
+    if (houseNo) filter.houseNo = houseNo;
+    if (streetNo) filter.streetNo = streetNo;
+    if (area) filter.area = area;
+    if (city) filter.city = city;
+    if (state) filter.state = state;
+    if (postalCode) filter.postalCode = postalCode;
 
     const address = await addressService.findAll(filter);
 
-    logger.info(`🤗 -> All Address finded Successfully `);
+    logger.info('🤗 -> All Address finded Successfully ');
     res.status(201).json({
       success: true,
-      successMessage: `🤗 -> All Address finded Successfully`,
-      address: address,
+      successMessage: '🤗 -> All Address finded Successfully',
+      address,
     });
   } catch (error) {
-    logger.error(`😡 -> Address not Finded...`);
+    logger.error('😡 -> Address not Finded...');
     return next(error);
   }
 };
 
 const del = async (req, res, next) => {
-  logger.info(`<-----😉 -----> Address Delete Controller <-----😉 ----->`);
+  logger.info('<-----😉 -----> Address Delete Controller <-----😉 ----->');
 
   try {
-    const id = req.params.id;
+    const { id } = req.params.id;
     const result = await addressService.del(id);
 
-    logger.info(`Address Deleted Successfully...`);
+    logger.info('Address Deleted Successfully...');
     res.status(201).json({
       success: true,
-      successMessage: `Address Deleted Successfully...`,
+      successMessage: 'Address Deleted Successfully...',
       address: result,
     });
   } catch (error) {
-    logger.error(`😡 -> Address not Deleted...`);
+    logger.error('😡 -> Address not Deleted...');
     return next(error);
   }
 };

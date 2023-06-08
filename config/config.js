@@ -1,4 +1,5 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
+
 dotenv.config();
 
 const { DB_USERNAME, DB_NAME, DB_HOST, DB_DIALECT } = process.env;

@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 
 const hashPassword = (req, res, next) => {
   const { password, newPassword } = req.body;

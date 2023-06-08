@@ -1,9 +1,10 @@
-import logger from "../utils/logger.js";
-import dotenv from "dotenv";
+import stripe from 'stripe';
+import dotenv from 'dotenv';
+import logger from '../utils/logger';
+
 dotenv.config();
 
-const { STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY } = process.env;
-import stripe from "stripe";
+const { STRIPE_SECRET_KEY } = process.env;
 const stripeInstance = stripe(STRIPE_SECRET_KEY);
 
 // ********************************************************************************** //
@@ -12,14 +13,14 @@ const stripeInstance = stripe(STRIPE_SECRET_KEY);
 
 const stripeCustomer = async (name, email) => {
   logger.info(
-    `<-----😉 -----> Payment Create Stripe Customer Service <-----😉 ----->`
+    '<-----😉 -----> Payment Create Stripe Customer Service <-----😉 ----->',
   );
   try {
-    const stripeCustomer = await stripeInstance.customers.create({
+    const customer = await stripeInstance.customers.create({
       name,
       email,
     });
-    return stripeCustomer;
+    return customer;
   } catch (error) {
     logger.error(error);
     throw error;
@@ -28,10 +29,10 @@ const stripeCustomer = async (name, email) => {
 
 const cardToken = async (cardName, cardNumber, expMonth, expYear, cardCvc) => {
   logger.info(
-    `<-----😉 -----> Payment Create Card Token Service <-----😉 ----->`
+    '<-----😉 -----> Payment Create Card Token Service <-----😉 ----->',
   );
   try {
-    const cardToken = await stripeInstance.tokens.create({
+    const token = await stripeInstance.tokens.create({
       card: {
         name: cardName,
         number: cardNumber,
@@ -40,7 +41,7 @@ const cardToken = async (cardName, cardNumber, expMonth, expYear, cardCvc) => {
         cvc: cardCvc,
       },
     });
-    return cardToken;
+    return token;
   } catch (error) {
     logger.error(error);
     throw error;
@@ -48,7 +49,7 @@ const cardToken = async (cardName, cardNumber, expMonth, expYear, cardCvc) => {
 };
 
 const createCard = async (stripeCustomerId, cardTokenId) => {
-  logger.info(`<-----😉 -----> Payment Create Card Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Payment Create Card Service <-----😉 ----->');
   try {
     const card = await stripeInstance.customers.createSource(stripeCustomerId, {
       source: `${cardTokenId}`,
@@ -61,17 +62,17 @@ const createCard = async (stripeCustomerId, cardTokenId) => {
 };
 
 const createCharge = async (cardId, stripeCustomerId, amount) => {
-  logger.info(`<-----😉 -----> Payment Create Charge Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Payment Create Charge Service <-----😉 ----->');
   try {
-    const createCharge = await stripeInstance.charges.create({
+    const charge = await stripeInstance.charges.create({
       card: cardId,
       customer: stripeCustomerId,
-      amount: parseInt(amount) * 100,
-      currency: "Pkr",
-      receipt_email: `test@gmail.com`,
+      amount: parseInt(amount, 10) * 100,
+      currency: 'Pkr',
+      receipt_email: 'test@gmail.com',
       description: `Stripe Charge Of Amount ${amount} for Payment`,
     });
-    return createCharge;
+    return charge;
   } catch (error) {
     logger.error(error);
     throw error;
@@ -79,10 +80,10 @@ const createCharge = async (cardId, stripeCustomerId, amount) => {
 };
 
 const viewAllCards = async (customerId) => {
-  logger.info(`<-----😉 -----> Payment View All Cards Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Payment View All Cards Service <-----😉 ----->');
   try {
     const savedCards = await stripeInstance.customers.listSources(customerId, {
-      object: "card",
+      object: 'card',
     });
     return savedCards;
   } catch (error) {
@@ -96,10 +97,10 @@ const updateCardDetails = async (
   cardId,
   cardName,
   cardExpMonth,
-  cardExpYear
+  cardExpYear,
 ) => {
   logger.info(
-    `<-----😉 -----> Payment Update Card Details Service <-----😉 ----->`
+    '<-----😉 -----> Payment Update Card Details Service <-----😉 ----->',
   );
   try {
     const card = await stripeInstance.customers.updateSource(
@@ -109,7 +110,7 @@ const updateCardDetails = async (
         name: cardName,
         exp_month: cardExpMonth,
         exp_year: cardExpYear,
-      }
+      },
     );
     return card;
   } catch (error) {
@@ -119,13 +120,10 @@ const updateCardDetails = async (
 };
 
 const deleteCard = async (customerId, cardId) => {
-  logger.info(`<-----😉 -----> Delete Card Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Delete Card Service <-----😉 ----->');
   try {
-    const deleteCard = await stripeInstance.customers.deleteSource(
-      customerId,
-      cardId
-    );
-    return deleteCard;
+    const del = await stripeInstance.customers.deleteSource(customerId, cardId);
+    return del;
   } catch (error) {
     logger.error(error);
     throw error;

@@ -1,16 +1,16 @@
-import logger from "../utils/logger.js";
+import logger from '../utils/logger';
 
 const isAdmin = async (req, res, next) => {
-  logger.info(`<-------😉 -------> isAdmin Middleware <-------😉 ------->`);
+  logger.info('<-------😉 -------> isAdmin Middleware <-------😉 ------->');
 
   try {
-    const { userId, email, role } = req.user;
-    if (role !== "superAdmin") throw new Error(`unAuthorize User...`);
+    const { role } = req.user;
+    if (role !== 'superAdmin') throw new Error('unAuthorize User...');
     next();
   } catch (error) {
-    logger.error(`User is not Admin...`);
+    logger.error('User is not Admin...');
     return next(error);
   }
 };
 
-export { isAdmin };
+export default isAdmin;

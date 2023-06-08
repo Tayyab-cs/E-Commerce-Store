@@ -1,6 +1,6 @@
 export default (sequelize, DataTypes) => {
-  var Category = sequelize.define(
-    "Category",
+  const Category = sequelize.define(
+    'Category',
     {
       name: {
         type: DataTypes.STRING,
@@ -16,15 +16,15 @@ export default (sequelize, DataTypes) => {
     {
       paranoid: true, // used for soft delete...
       freezeTableName: true, // used to display table name same a defined...
-    }
+    },
   );
 
-  // <--------------------------> Association self-referencing <------------😉------------>
-  Category.hasMany(Category, { as: "subcategories", foreignKey: "parentId" });
-  Category.belongsTo(Category, { as: "parent", foreignKey: "parentId" });
+  // <------😉-------> Association self-referencing <------😉------->
+  Category.hasMany(Category, { as: 'subcategories', foreignKey: 'parentId' });
+  Category.belongsTo(Category, { as: 'parent', foreignKey: 'parentId' });
 
-  // <--------------------------> Association one to many subCategories-to-products <------------😉------------>
-  Category.associate = function (models) {
+  // <------😉-------> Association one to many subCategories-to-products <------😉------->
+  Category.associate = (models) => {
     Category.hasMany(models.Products);
   };
 

@@ -1,4 +1,4 @@
-import joi from "joi";
+import joi from 'joi';
 
 // <-----😉 -----> validate Address object keys <-----😉 ----->
 const address = joi.object().keys({

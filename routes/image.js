@@ -1,9 +1,10 @@
-import express from "express";
+import express from 'express';
+import upload from '../middlewares/uploadImage';
+import uploadImage from '../controllers/image';
+
 const route = express.Router();
-import { upload } from "../middlewares/uploadImage.js";
-import { uploadImage } from "../controllers/image.js";
 
 // <-----😉 -----> Image Api's <-----😉 ----->
-route.post("/upload", upload.single("image"), uploadImage);
+route.post('/upload', upload.single('image'), uploadImage);
 
 export default route;

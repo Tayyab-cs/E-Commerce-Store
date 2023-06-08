@@ -1,7 +1,6 @@
-"use strict";
 export default (sequelize, DataTypes) => {
-  var Admin = sequelize.define(
-    "Admin",
+  const Admin = sequelize.define(
+    'Admin',
     {
       firstName: {
         type: DataTypes.STRING,
@@ -33,7 +32,7 @@ export default (sequelize, DataTypes) => {
           recordLimit() {
             return Admin.count().then((count) => {
               if (count > 1) {
-                throw new Error("Maximum record limit reached.");
+                throw new Error('Maximum record limit reached.');
               }
             });
           },
@@ -43,7 +42,7 @@ export default (sequelize, DataTypes) => {
     {
       paranoid: true, // used for soft delete...
       freezeTableName: true, // used to display table name same a defined...
-    }
+    },
   );
   return Admin;
 };

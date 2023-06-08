@@ -1,11 +1,11 @@
-import express from "express";
+import express from 'express';
+import order from '../controllers/order';
+import decryptToken from '../middlewares/decryptToken';
+import isCustomer from '../middlewares/isCustomer';
+
 const route = express.Router();
 
-import { order } from "../controllers/order.js";
-import { decryptToken } from "../middlewares/decryptToken.js";
-import { isCustomer } from "../middlewares/isCustomer.js";
-
 // <-----😉 -----> Order Api's <-----😉 ----->
-route.post("/order", decryptToken, isCustomer, order);
+route.post('/order', decryptToken, isCustomer, order);
 
 export default route;

@@ -1,12 +1,12 @@
-import aws from "aws-sdk";
-import fs from "fs";
-import logger from "../logger.js";
-import db from "../../database/connect.js";
-import validateImage from "../../validation/image.js";
-import { credentials, config } from "../../config/aws-config.js";
+import aws from 'aws-sdk';
+import fs from 'fs';
+import logger from '../logger';
+import db from '../../database/connect';
+import validateImage from '../../validation/image';
+import { credentials, config } from '../../config/aws-config';
 
 const uploadImage = async (file, productId) => {
-  logger.info(`<-----😉 -----> Image Upload Helper <-----😉 ----->`);
+  logger.info('<-----😉 -----> Image Upload Helper <-----😉 ----->');
 
   // verify s3 bucket credentials....
   aws.config.update(credentials);
@@ -19,12 +19,12 @@ const uploadImage = async (file, productId) => {
     const prodId = productId;
 
     // validate Image keys
-    const { error, value } = validateImage.validate(item);
+    const { error } = validateImage.validate(item);
     if (error) return error;
 
     // preparing params object to upload image to S3....
     const params = {
-      Bucket: "e-store-bket",
+      Bucket: 'e-store-bket',
       Key: item.originalname,
       Body: item.path,
       s3ForcePathStyle: true,
@@ -41,23 +41,25 @@ const uploadImage = async (file, productId) => {
           productId: prodId,
         });
 
-        if (!result) throw new Error(`Image not upload to s3`);
-        logger.info("Image details saved to the database");
+        if (!result) throw new Error('Image not upload to s3');
+        logger.info('Image details saved to the database');
 
         // Deleting Image from uploads folder after saving it DB and S3.
         fs.unlink(`uploads/${item.originalname}`, (err) => {
-          err
-            ? logger.error(`Image not delete from Upload Folder...`)
-            : logger.info(`Image deleted successfully from Upload Folder...`);
+          if (err) {
+            logger.error('Image not delete from Upload Folder...');
+          } else {
+            logger.info('Image deleted successfully from Upload Folder...');
+          }
         });
 
         return result.id;
-      } catch (error) {
-        logger.error("Error saving image details to the database:", error);
-        return error;
+      } catch (err) {
+        logger.error('Error saving image details to the database:', err);
+        return err;
       }
     });
   });
 };
 
-export { uploadImage };
+export default uploadImage;

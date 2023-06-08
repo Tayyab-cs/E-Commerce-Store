@@ -1,26 +1,23 @@
-import express from "express";
+import express from 'express';
+import validate from '../middlewares/validate';
+import validateProduct from '../validation/products';
+import upload from '../middlewares/uploadImage';
+import productController from '../controllers/products';
+import decryptToken from '../middlewares/decryptToken';
+import isAdmin from '../middlewares/isAdmin';
+
 const route = express.Router();
-
-import { validate } from "../middlewares/validate.js";
-import validateProduct from "../validation/products.js";
-
-import { upload } from "../middlewares/uploadImage.js";
-
-import productController from "../controllers/products.js";
-
-import { decryptToken } from "../middlewares/decryptToken.js";
-import { isAdmin } from "../middlewares/isAdmin.js";
 
 // <-----😉 -----> Product Api's <-----😉 ----->
 route.post(
-  "/create",
+  '/create',
   decryptToken,
-  upload.array("image"),
+  upload.array('image'),
   validate(validateProduct.create),
-  productController.create
+  productController.create,
 );
-route.get("/findAll", decryptToken, isAdmin, productController.findAll);
-route.patch("/update/:id", decryptToken, isAdmin, productController.update);
-route.delete("/delete/:id", decryptToken, isAdmin, productController.del);
+route.get('/findAll', decryptToken, isAdmin, productController.findAll);
+route.patch('/update/:id', decryptToken, isAdmin, productController.update);
+route.delete('/delete/:id', decryptToken, isAdmin, productController.del);
 
 export default route;

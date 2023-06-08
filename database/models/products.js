@@ -1,6 +1,6 @@
 export default (sequelize, DataTypes) => {
-  var Products = sequelize.define(
-    "Products",
+  const Products = sequelize.define(
+    'Products',
     {
       name: {
         type: DataTypes.STRING,
@@ -21,30 +21,30 @@ export default (sequelize, DataTypes) => {
       categoryId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "Category",
-          key: "id",
+          model: 'Category',
+          key: 'id',
         },
       },
     },
     {
       paranoid: true, // used for soft delete...
       freezeTableName: true, // used to display table name same a defined...
-    }
+    },
   );
 
-  // <------------😉------------> Association one to one products-to-category <------------😉------------>
-  Products.associate = function (models) {
-    Products.belongsTo(models.Category, { foreignKey: categoryId });
+  // <-------😉-------> Association one to one products-to-category <-------😉------->
+  Products.associate = (models) => {
+    Products.belongsTo(models.Category);
   };
 
-  // <------------😉------------> Association one to Many products-to-images <------------😉------------>
-  Products.associate = function (models) {
+  // <-------😉-------> Association one to Many products-to-images <-------😉------->
+  Products.associate = (models) => {
     Products.hasMany(models.Images);
   };
 
-  // <------------😉------------> Association many to one products-to-order-through-orderedProduct <------------😉------------>
-  Products.associate = function (models) {
-    Products.belongsToMany(models.Order, { through: "OrderedProduct" });
+  // <----😉----> Association many to one products-to-order-through-orderedProduct <----😉---->
+  Products.associate = (models) => {
+    Products.belongsToMany(models.Order, { through: 'OrderedProduct' });
   };
 
   return Products;

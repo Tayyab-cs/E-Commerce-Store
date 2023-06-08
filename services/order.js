@@ -1,5 +1,5 @@
-import logger from "../utils/logger.js";
-import db from "../database/connect.js";
+import logger from '../utils/logger';
+import db from '../database/connect';
 
 // ********************************************************************************** //
 // ********************************** ORDER SERVICE ********************************* //
@@ -7,7 +7,7 @@ import db from "../database/connect.js";
 
 const findByPk = async (id) => {
   logger.info(
-    `<-----😉 -----> Order find-customer-by-PK Service <-----😉 ----->`
+    '<-----😉 -----> Order find-customer-by-PK Service <-----😉 ----->',
   );
 
   try {
@@ -21,9 +21,8 @@ const findByPk = async (id) => {
 
 const findById = async (customerId) => {
   logger.info(
-    `<-----😉 -----> Order find-address-by-id Service <-----😉 ----->`
+    '<-----😉 -----> Order find-address-by-id Service <-----😉 ----->',
   );
-  console.log(customerId);
   try {
     const result = await db.address.findOne({ where: { customerId } });
     return result;
@@ -35,7 +34,7 @@ const findById = async (customerId) => {
 
 const findProductId = async (id) => {
   logger.info(
-    `<-----😉 -----> Order find-product-by-id Service <-----😉 ----->`
+    '<-----😉 -----> Order find-product-by-id Service <-----😉 ----->',
   );
   try {
     const result = await db.products.findByPk(id);
@@ -47,7 +46,7 @@ const findProductId = async (id) => {
 };
 
 const createOrder = async (totalAmount, customerId) => {
-  logger.info(`<-----😉 -----> Order Create Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Order Create Service <-----😉 ----->');
   try {
     const result = await db.order.create({ totalAmount, customerId });
     return result;
@@ -58,7 +57,7 @@ const createOrder = async (totalAmount, customerId) => {
 };
 
 const createOrderProduct = async (products) => {
-  logger.info(`<-----😉 -----> Ordered Product Create Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Ordered Product Create Service <-----😉 ----->');
   try {
     const result = await db.orderedProduct.bulkCreate(products);
     return result;
@@ -69,7 +68,7 @@ const createOrderProduct = async (products) => {
 };
 
 const findAll = async () => {
-  logger.info(`<-----😉 -----> Order findAll Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Order findAll Service <-----😉 ----->');
 
   try {
     const result = await db.customer.findAll();

@@ -1,4 +1,4 @@
-import joi from "joi";
+import joi from 'joi';
 
 // <-----😉 -----> validate Create Stripe Customer object keys <-----😉 ----->
 const createStripeCustomer = joi.object().keys({

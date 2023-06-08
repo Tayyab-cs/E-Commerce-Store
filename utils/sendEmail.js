@@ -1,12 +1,13 @@
-import nodemailer from "nodemailer";
-import logger from "./logger.js";
-import dotenv from "dotenv";
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+import logger from './logger';
+
 dotenv.config();
 
-const sendEmail = async (email, subject, text) => {
+const sendEmail = async (email, subj, text) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: "outlook",
+      service: 'outlook',
       auth: {
         user: process.env.SENDER_MAIL,
         pass: process.env.SENDER_PASS,
@@ -16,16 +17,17 @@ const sendEmail = async (email, subject, text) => {
     const mailOptions = {
       from: process.env.SENDER_MAIL,
       to: email,
-      subject: subject,
+      subject: subj,
       text: `Your new password: ${text}`,
     };
 
-    await transporter.sendMail(mailOptions, function (err, data) {
-      if (err) return console.log(`ERROR: ${err}`);
-      logger.info(`🤗 -> Email sent Successfully...`);
+    transporter.sendMail(mailOptions, (err) => {
+      if (err) return err;
+      logger.info('🤗 -> Email sent Successfully...');
+      return true;
     });
   } catch (error) {
-    logger.error(error, "😡 -> Email not sent successfully...");
+    logger.error(error, '😡 -> Email not sent successfully...');
   }
 };
 

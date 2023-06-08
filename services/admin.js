@@ -1,12 +1,12 @@
-import logger from "../utils/logger.js";
-import db from "../database/connect.js";
+import logger from '../utils/logger';
+import db from '../database/connect';
 
 // ********************************************************************************** //
 // ********************************** ADMIN SERVICE ********************************* //
 // ********************************************************************************** //
 
 const findByEmail = async (email) => {
-  logger.info(`<-----😉 -----> Admin SignUp Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Admin SignUp Service <-----😉 ----->');
   try {
     const result = await db.admin.findOne({ where: { email } });
     return result;
@@ -17,7 +17,7 @@ const findByEmail = async (email) => {
 };
 
 const create = async (firstName, lastName, email, password) => {
-  logger.info(`<-----😉 -----> Admin Create Service <-----😉 ----->`);
+  logger.info('<-----😉 -----> Admin Create Service <-----😉 ----->');
   try {
     const result = await db.admin.create({
       firstName,

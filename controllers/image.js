@@ -1,22 +1,22 @@
-import aws from "aws-sdk";
-import logger from "../utils/logger.js";
-import db from "../database/connect.js";
-import { errorObject } from "../utils/errorObject.js";
-import { credentials, config } from "../config/aws-config.js";
+import aws from 'aws-sdk';
+import logger from '../utils/logger';
+import db from '../database/connect';
+import errorObject from '../utils/errorObject';
+import { credentials, config } from '../config/aws-config';
 
 const uploadImage = (req, res, next) => {
-  logger.info(`<-----😉 -----> Upload Image <-----😉 ----->`);
+  logger.info('<-----😉 -----> Upload Image <-----😉 ----->');
 
   // verify s3 bucket credentials....
   aws.config.update(credentials);
   aws.config.update(config);
 
   const s3 = new aws.S3();
-  const file = req.file;
+  const { file } = req.file;
   const { originalname } = req.file;
 
   const params = {
-    Bucket: "e-store-bket",
+    Bucket: 'e-store-bket',
     Key: originalname,
     Body: file.path,
     s3ForcePathStyle: true,
@@ -24,25 +24,25 @@ const uploadImage = (req, res, next) => {
 
   s3.upload(params, (err, data) => {
     try {
-      if (err) throw errorObject(`🤕 -> Error uploading image to S3`);
+      if (err) throw errorObject('🤕 -> Error uploading image to S3');
       // Save image details to the database using Sequelize
       const result = db.image.create({
         name: originalname,
         url: data.Location,
       });
-      if (!result) throw errorObject(`🤕 -> Error uploading image to S3`);
+      if (!result) throw errorObject('🤕 -> Error uploading image to S3');
 
-      logger.info(`🤗 -> Image details saved to the database...`);
+      logger.info('🤗 -> Image details saved to the database...');
       return res.status(200).json({
         success: true,
-        message: `🤗 -> Image details saved to the database...`,
+        message: '🤗 -> Image details saved to the database...',
         image: result,
       });
     } catch (error) {
-      logger.error(`😡 -> Image not uploaded to S3...`);
+      logger.error('😡 -> Image not uploaded to S3...');
       return next(error);
     }
   });
 };
 
-export { uploadImage };
+export default uploadImage;

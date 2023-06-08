@@ -1,6 +1,6 @@
 export default (sequelize, DataTypes) => {
-  var Customer = sequelize.define(
-    "Customer",
+  const Customer = sequelize.define(
+    'Customer',
     {
       firstName: {
         type: DataTypes.STRING,
@@ -33,16 +33,16 @@ export default (sequelize, DataTypes) => {
     {
       paranoid: true, // used for soft delete...
       freezeTableName: true, // used to display table name same a defined...
-    }
+    },
   );
 
-  // <------------😉------------> Association one to one customer-to-Address <------------😉------------>
-  Customer.associate = function (models) {
-    Customer.hasOne(models.Address, { foreignKey: "customerId" });
+  // <-------😉-------> Association one to one customer-to-Address <-------😉------->
+  Customer.associate = (models) => {
+    Customer.hasOne(models.Address, { foreignKey: 'customerId' });
   };
 
-  // <------------😉------------> Association one to many customer-to-order <------------😉------------>
-  Customer.associate = function (models) {
+  // <-------😉-------> Association one to many customer-to-order <-------😉------->
+  Customer.associate = (models) => {
     Customer.hasMany(models.Order);
   };
 

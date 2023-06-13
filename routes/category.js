@@ -1,8 +1,8 @@
 import express from 'express';
-import validate from '../middlewares/validate';
-import validateCategory from '../validation/category';
-import decryptToken from '../middlewares/decryptToken';
-import categoryController from '../controllers/category';
+import validate from '../middlewares/validate.js';
+import validateCategory from '../validation/category.js';
+import decryptToken from '../middlewares/decryptToken.js';
+import categoryController from '../controllers/category.js';
 
 const route = express.Router();
 

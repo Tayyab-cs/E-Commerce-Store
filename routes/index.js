@@ -1,12 +1,12 @@
 import express from 'express';
-import adminApis from './admin';
-import categoryApis from './category';
-import productApis from './products';
-import customerApis from './customer';
-import addressApis from './address';
-import imageApis from './image';
-import orderApis from './order';
-import paymentApis from './payment';
+import adminApis from './admin.js';
+import categoryApis from './category.js';
+import productApis from './products.js';
+import customerApis from './customer.js';
+import addressApis from './address.js';
+import imageApis from './image.js';
+import orderApis from './order.js';
+import paymentApis from './payment.js';
 
 const router = express.Router();
 

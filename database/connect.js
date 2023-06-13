@@ -1,13 +1,13 @@
 import { Sequelize, DataTypes } from 'sequelize';
-import dbConfig from '../config/config';
-import category from './models/category';
-import admin from './models/admin';
-import products from './models/products';
-import customer from './models/customer';
-import order from './models/order';
-import orderedProduct from './models/orderedProduct';
-import address from './models/address';
-import image from './models/image';
+import dbConfig from '../config/config.js';
+import category from './models/category.js';
+import admin from './models/admin.js';
+import products from './models/products.js';
+import customer from './models/customer.js';
+import order from './models/order.js';
+import orderedProduct from './models/orderedProduct.js';
+import address from './models/address.js';
+import image from './models/image.js';
 
 // eslint-disable-next-line object-curly-newline
 const { username, password, database, host, dialect } = dbConfig.development;

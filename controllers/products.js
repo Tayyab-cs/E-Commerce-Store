@@ -1,8 +1,8 @@
-import logger from '../utils/logger';
-import db from '../database/connect';
-import errorObject from '../utils/errorObject';
-import productService from '../services/products';
-import uploadImage from '../utils/helper/uploadImage';
+import logger from '../utils/logger.js';
+import db from '../database/connect.js';
+import errorObject from '../utils/errorObject.js';
+import productService from '../services/products.js';
+import uploadImage from '../utils/helper/uploadImage.js';
 
 // ********************************************************************************** //
 // ****************************** PRODUCT CONTROLLER ******************************* //

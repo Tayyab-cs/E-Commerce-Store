@@ -1,11 +1,10 @@
 import express from 'express';
-import hashPassword from '../middlewares/hashPassword';
-import customerController from '../controllers/customer';
-import validateCustomer from '../validation/customer';
-import validate from '../middlewares/validate';
-
-import decryptToken from '../middlewares/decryptToken';
-import isAdmin from '../middlewares/isAdmin';
+import hashPassword from '../middlewares/hashPassword.js';
+import customerController from '../controllers/customer.js';
+import validateCustomer from '../validation/customer.js';
+import validate from '../middlewares/validate.js';
+import decryptToken from '../middlewares/decryptToken.js';
+import isAdmin from '../middlewares/isAdmin.js';
 
 const route = express.Router();
 

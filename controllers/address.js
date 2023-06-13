@@ -1,6 +1,6 @@
-import logger from '../utils/logger';
-import errorObject from '../utils/errorObject';
-import addressService from '../services/address';
+import logger from '../utils/logger.js';
+import errorObject from '../utils/errorObject.js';
+import addressService from '../services/address.js';
 // ********************************************************************************** //
 // ******************************** ADDRESS CONTROLLER ******************************** //
 // ********************************************************************************** //

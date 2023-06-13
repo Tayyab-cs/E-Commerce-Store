@@ -1,5 +1,5 @@
-import logger from '../utils/logger';
-import db from '../database/connect';
+import logger from '../utils/logger.js';
+import db from '../database/connect.js';
 
 const isCustomer = async (req, res, next) => {
   logger.info('<-------😉 -------> isCustomer Middleware <-------😉 ------->');

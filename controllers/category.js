@@ -1,6 +1,6 @@
-import logger from '../utils/logger';
-import errorObject from '../utils/errorObject';
-import categoryService from '../services/category';
+import logger from '../utils/logger.js';
+import errorObject from '../utils/errorObject.js';
+import categoryService from '../services/category.js';
 
 // ********************************************************************************** //
 // ****************************** CATEGORY CONTROLLER ******************************* //

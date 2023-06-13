@@ -1,9 +1,9 @@
 import express from 'express';
-import paymentController from '../controllers/payment';
-import validate from '../middlewares/validate';
-import validatePayment from '../validation/payment';
-import decryptToken from '../middlewares/decryptToken';
-import isCustomer from '../middlewares/isCustomer';
+import paymentController from '../controllers/payment.js';
+import validate from '../middlewares/validate.js';
+import validatePayment from '../validation/payment.js';
+import decryptToken from '../middlewares/decryptToken.js';
+import isCustomer from '../middlewares/isCustomer.js';
 
 const route = express.Router();
 

@@ -1,11 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import db from './database/connect';
-import errorHandler from './middlewares/errorHandling';
-import superAdmin from './dbSeed/superAdmin';
-import config from './config/app-config';
-import router from './routes/index';
-import logger from './utils/logger';
+import db from './database/connect.js';
+import errorHandler from './middlewares/errorHandling.js';
+import superAdmin from './dbSeed/superAdmin.js';
+import config from './config/app-config.js';
+import router from './routes/index.js';
+import logger from './utils/logger.js';
 
 dotenv.config();
 

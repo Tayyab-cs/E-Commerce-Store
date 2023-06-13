@@ -1,9 +1,9 @@
 import aws from 'aws-sdk';
 import fs from 'fs';
-import logger from '../logger';
-import db from '../../database/connect';
-import validateImage from '../../validation/image';
-import { credentials, config } from '../../config/aws-config';
+import logger from '../logger.js';
+import db from '../../database/connect.js';
+import validateImage from '../../validation/image.js';
+import { credentials, config } from '../../config/aws-config.js';
 
 const uploadImage = async (file, productId) => {
   logger.info('<-----😉 -----> Image Upload Helper <-----😉 ----->');

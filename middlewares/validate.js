@@ -1,7 +1,7 @@
 import Joi from 'joi';
-import logger from '../utils/logger';
-import pick from '../utils/pick';
-import errorObject from '../utils/errorObject';
+import logger from '../utils/logger.js';
+import pick from '../utils/pick.js';
+import errorObject from '../utils/errorObject.js';
 
 // ********************************************************************************** //
 // ********************************** VALIDATE PATHS ******************************** //

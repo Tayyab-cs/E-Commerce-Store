@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
-import logger from '../utils/logger';
-import errorObject from '../utils/errorObject';
-import customerService from '../services/customer';
-import signLoginData from '../utils/helper/createToken';
-import sendEmail from '../utils/sendEmail';
+import logger from '../utils/logger.js';
+import errorObject from '../utils/errorObject.js';
+import customerService from '../services/customer.js';
+import signLoginData from '../utils/helper/createToken.js';
+import sendEmail from '../utils/sendEmail.js';
 
 // ********************************************************************************** //
 // ******************************** CUSTOMER CONTROLLER ******************************** //

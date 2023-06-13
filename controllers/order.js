@@ -1,6 +1,6 @@
-import logger from '../utils/logger';
-import errorObject from '../utils/errorObject';
-import orderService from '../services/order';
+import logger from '../utils/logger.js';
+import errorObject from '../utils/errorObject.js';
+import orderService from '../services/order.js';
 
 // ********************************************************************************** //
 // ******************************** ORDER CONTROLLER ******************************** //

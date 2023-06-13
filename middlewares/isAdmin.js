@@ -1,4 +1,4 @@
-import logger from '../utils/logger';
+import logger from '../utils/logger.js';
 
 const isAdmin = async (req, res, next) => {
   logger.info('<-------😉 -------> isAdmin Middleware <-------😉 ------->');

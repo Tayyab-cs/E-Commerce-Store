@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import logger from '../utils/logger';
+import logger from '../utils/logger.js';
 
 const decryptToken = async (req, res, next) => {
   logger.info('<-------😉 -------> JWT Decode Middleware <-------😉 ------->');

@@ -1,9 +1,9 @@
 import express from 'express';
-import hashPassword from '../middlewares/hashPassword';
-import validate from '../middlewares/validate';
-import validateAdmin from '../validation/admin';
-import adminController from '../controllers/admin';
-import decryptToken from '../middlewares/decryptToken';
+import hashPassword from '../middlewares/hashPassword.js';
+import validate from '../middlewares/validate.js';
+import validateAdmin from '../validation/admin.js';
+import adminController from '../controllers/admin.js';
+import decryptToken from '../middlewares/decryptToken.js';
 
 const route = express.Router();
 

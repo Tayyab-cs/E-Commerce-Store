@@ -1,8 +1,8 @@
 import aws from 'aws-sdk';
-import logger from '../utils/logger';
-import db from '../database/connect';
-import errorObject from '../utils/errorObject';
-import { credentials, config } from '../config/aws-config';
+import logger from '../utils/logger.js';
+import db from '../database/connect.js';
+import errorObject from '../utils/errorObject.js';
+import { credentials, config } from '../config/aws-config.js';
 
 const uploadImage = (req, res, next) => {
   logger.info('<-----😉 -----> Upload Image <-----😉 ----->');

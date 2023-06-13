@@ -14,5 +14,6 @@ module.exports = {
     'consistent-return': 'off',
     'nonblock-statement-body-position': 'off',
     'object-curly-newline': 'off',
+    'import/extensions': 'off',
   },
 };

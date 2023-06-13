@@ -1,5 +1,5 @@
-import logger from '../utils/logger';
-import paymentService from '../services/payment';
+import logger from '../utils/logger.js';
+import paymentService from '../services/payment.js';
 
 // Create a new customer for stripe
 const createCustomer = async (req, res, next) => {

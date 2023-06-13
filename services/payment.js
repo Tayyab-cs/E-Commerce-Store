@@ -1,6 +1,6 @@
 import stripe from 'stripe';
 import dotenv from 'dotenv';
-import logger from '../utils/logger';
+import logger from '../utils/logger.js';
 
 dotenv.config();
 

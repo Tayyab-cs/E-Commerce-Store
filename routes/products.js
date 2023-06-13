@@ -1,10 +1,10 @@
 import express from 'express';
-import validate from '../middlewares/validate';
-import validateProduct from '../validation/products';
-import upload from '../middlewares/uploadImage';
-import productController from '../controllers/products';
-import decryptToken from '../middlewares/decryptToken';
-import isAdmin from '../middlewares/isAdmin';
+import validate from '../middlewares/validate.js';
+import validateProduct from '../validation/products.js';
+import upload from '../middlewares/uploadImage.js';
+import productController from '../controllers/products.js';
+import decryptToken from '../middlewares/decryptToken.js';
+import isAdmin from '../middlewares/isAdmin.js';
 
 const route = express.Router();
 

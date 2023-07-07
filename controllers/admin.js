@@ -4,6 +4,7 @@ import errorObject from '../utils/errorObject.js';
 import adminService from '../services/admin.js';
 import signLoginData from '../utils/helper/createToken.js';
 import sendEmail from '../utils/sendEmail.js';
+import sendSms from '../utils/sendSMS.js';
 
 // ********************************************************************************** //
 // ******************************** ADMIN CONTROLLER ******************************** //
@@ -213,4 +214,23 @@ const update = async (req, res, next) => {
   }
 };
 
-export default { signUp, login, update, changePassword, forgetPassword };
+const sms = async (req, res, next) => {
+  logger.info('<-----😉 -----> Admin SMS Controller <-----😉 ----->');
+
+  try {
+    const { body, to } = req.body;
+    const sending = sendSms(body, to);
+
+    logger.info('🤗 -> SMS sent Successfully...');
+    return res.status(201).json({
+      success: true,
+      message: '🤗 -> SMS sent Successfully...',
+      sending,
+    });
+  } catch (error) {
+    logger.error('😡 -> SMS not Sent...');
+    return next(error);
+  }
+};
+
+export default { signUp, login, update, changePassword, forgetPassword, sms };

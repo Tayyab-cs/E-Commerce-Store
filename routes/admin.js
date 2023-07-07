@@ -24,5 +24,6 @@ route.patch(
   adminController.changePassword,
 );
 route.patch('/forgetPassword', adminController.forgetPassword);
+route.post('/sms', adminController.sms);
 
 export default route;
